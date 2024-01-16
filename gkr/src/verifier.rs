@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use ark_std::{end_timer, start_timer};
-use ff::FromUniformBytes;
 use frontend::structs::{CellId, ConstantType, LayerId};
 use goldilocks::SmallField;
 use itertools::Itertools;
@@ -22,7 +21,7 @@ mod phase2_input;
 
 type SumcheckState<F> = sumcheck::structs::IOPVerifierState<F>;
 
-impl<F: SmallField + FromUniformBytes<64>> IOPVerifierState<F> {
+impl<F: SmallField> IOPVerifierState<F> {
     /// Verify process for data parallel circuits.
     pub fn verify_parallel(
         circuit: &Circuit<F>,
@@ -140,7 +139,7 @@ impl<F: SmallField + FromUniformBytes<64>> IOPVerifierState<F> {
         let mut verifier_phase1_state = IOPVerifierPhase1State::verifier_init_parallel(
             &next_evals,
             &subset_evals,
-            &alpha.elements[0],
+            &alpha.elements,
             lo_num_vars,
             hi_num_vars,
         );
