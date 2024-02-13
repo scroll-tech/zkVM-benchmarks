@@ -203,17 +203,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "frontend"
-version = "0.1.0"
-dependencies = [
- "ark-std",
- "ff",
- "goldilocks",
- "rayon",
- "serde",
-]
-
-[[package]]
 name = "funty"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -246,12 +235,27 @@ version = "0.1.0"
 dependencies = [
  "ark-std",
  "ff",
- "frontend",
  "goldilocks",
  "itertools 0.12.0",
  "multilinear_extensions",
  "serde",
  "serde_json",
+ "simple-frontend",
+ "sumcheck",
+ "transcript",
+]
+
+[[package]]
+name = "gkr-graph"
+version = "0.1.0"
+dependencies = [
+ "ark-std",
+ "ff",
+ "gkr",
+ "goldilocks",
+ "itertools 0.12.0",
+ "multilinear_extensions",
+ "simple-frontend",
  "sumcheck",
  "transcript",
 ]
@@ -259,7 +263,7 @@ dependencies = [
 [[package]]
 name = "goldilocks"
 version = "0.1.0"
-source = "git+https://github.com/zhenfeizhang/Goldilocks#dac2627b7b50745f1af63bea57545c91faf044bf"
+source = "git+https://github.com/zhenfeizhang/Goldilocks#bffec3f0a7e8592dc32849dcce4a6cc4b3615e48"
 dependencies = [
  "ff",
  "halo2curves",
@@ -299,6 +303,12 @@ dependencies = [
  "static_assertions",
  "subtle",
 ]
+
+[[package]]
+name = "heck"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
 [[package]]
 name = "itertools"
@@ -414,10 +424,6 @@ checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
 
 [[package]]
 name = "poseidon"
-version = "0.1.0"
-
-[[package]]
-name = "poseidon"
 version = "0.2.0"
 source = "git+https://github.com/zhenfeizhang/poseidon#da4bffbf4a4cf47719783c670aeb83a45b8b7b1d"
 dependencies = [
@@ -433,9 +439,9 @@ checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.76"
+version = "1.0.78"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95fc56cda0b5c3325f5fbbd7ff9fda9e02bb00bb3dac51252d2f1bfa1cb8cc8c"
+checksum = "e2422ad645d89c99f8f3e6b88a9fdeca7fabeac836b1002371c4367c8f984aae"
 dependencies = [
  "unicode-ident",
 ]
@@ -487,9 +493,9 @@ dependencies = [
 
 [[package]]
 name = "rayon"
-version = "1.8.0"
+version = "1.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c27db03db7734835b3f53954b534c91069375ce6ccaa2e065441e07d9b6cdb1"
+checksum = "fa7237101a77a10773db45d62004a272517633fbcc3df19d96455ede1122e051"
 dependencies = [
  "either",
  "rayon-core",
@@ -497,9 +503,9 @@ dependencies = [
 
 [[package]]
 name = "rayon-core"
-version = "1.12.0"
+version = "1.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ce3fb6ad83f861aac485e76e1985cd109d9a3713802152be56c3b1f0e0658ed"
+checksum = "1465873a3dfdaa8ae7cb14b4383657caab0b3e8a0aa9ae8e04b044854c8dfce2"
 dependencies = [
  "crossbeam-deque",
  "crossbeam-utils",
@@ -513,6 +519,12 @@ checksum = "bfa0f585226d2e68097d4f95d113b15b83a82e819ab25717ec0590d9584ef366"
 dependencies = [
  "semver",
 ]
+
+[[package]]
+name = "rustversion"
+version = "1.0.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ffc183a10b4478d04cbbbfc96d0873219d962dd5accaff2ffbd4ceb7df837f4"
 
 [[package]]
 name = "ryu"
@@ -558,6 +570,37 @@ dependencies = [
 ]
 
 [[package]]
+name = "simple-frontend"
+version = "0.1.0"
+dependencies = [
+ "ark-std",
+ "ff",
+ "goldilocks",
+ "itertools 0.12.0",
+ "rayon",
+ "serde",
+]
+
+[[package]]
+name = "singer-pro"
+version = "0.1.0"
+dependencies = [
+ "ark-std",
+ "ff",
+ "gkr",
+ "gkr-graph",
+ "goldilocks",
+ "itertools 0.12.0",
+ "paste",
+ "rayon",
+ "serde",
+ "simple-frontend",
+ "strum",
+ "strum_macros",
+ "transcript",
+]
+
+[[package]]
 name = "spin"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -568,6 +611,25 @@ name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
+
+[[package]]
+name = "strum"
+version = "0.25.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "290d54ea6f91c969195bdbcd7442c8c2a2ba87da8bf60a7ee86a235d4bc1e125"
+
+[[package]]
+name = "strum_macros"
+version = "0.25.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "23dc1fa9ac9c169a78ba62f0b841814b7abae11bdd047b9c58f893439e309ea0"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
+ "rustversion",
+ "syn 2.0.48",
+]
 
 [[package]]
 name = "subtle"
@@ -625,7 +687,7 @@ dependencies = [
  "ff",
  "goldilocks",
  "halo2curves",
- "poseidon 0.2.0",
+ "poseidon",
  "rayon",
  "serde",
 ]

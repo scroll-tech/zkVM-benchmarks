@@ -1,8 +1,8 @@
 use ark_std::{end_timer, start_timer};
-use frontend::structs::ConstantType;
 use goldilocks::SmallField;
 use itertools::Itertools;
 use multilinear_extensions::virtual_poly::{build_eq_x_r_vec, eq_eval, VPAuxInfo};
+use simple_frontend::structs::ConstantType;
 use transcript::Transcript;
 
 use crate::{
@@ -19,7 +19,7 @@ impl<'a, F: SmallField> IOPVerifierPhase2State<'a, F> {
         layer: &'a Layer<F>,
         layer_out_point: &Point<F>,
         layer_out_value: &F,
-        constant: impl Fn(&ConstantType<F>) -> F,
+        constant: impl Fn(ConstantType<F>) -> F::BaseField,
         hi_num_vars: usize,
     ) -> Self {
         let timer = start_timer!(|| "Verifier init phase 2");
@@ -27,21 +27,18 @@ impl<'a, F: SmallField> IOPVerifierPhase2State<'a, F> {
             .mul3s
             .iter()
             .map(|gate| Gate3In {
-                idx_in1: gate.idx_in1,
-                idx_in2: gate.idx_in2,
-                idx_in3: gate.idx_in3,
+                idx_in: gate.idx_in,
                 idx_out: gate.idx_out,
-                scaler: constant(&gate.scaler),
+                scalar: constant(gate.scalar),
             })
             .collect_vec();
         let mul2s = layer
             .mul2s
             .iter()
             .map(|gate| Gate2In {
-                idx_in1: gate.idx_in1,
-                idx_in2: gate.idx_in2,
+                idx_in: gate.idx_in,
                 idx_out: gate.idx_out,
-                scaler: constant(&gate.scaler),
+                scalar: constant(gate.scalar),
             })
             .collect_vec();
         let adds = layer
@@ -50,23 +47,25 @@ impl<'a, F: SmallField> IOPVerifierPhase2State<'a, F> {
             .map(|gate| Gate1In {
                 idx_in: gate.idx_in,
                 idx_out: gate.idx_out,
-                scaler: constant(&gate.scaler),
+                scalar: constant(gate.scalar),
             })
             .collect_vec();
         let add_consts = layer
             .add_consts
             .iter()
             .map(|gate| GateCIn {
+                idx_in: gate.idx_in,
                 idx_out: gate.idx_out,
-                constant: constant(&gate.constant),
+                scalar: constant(gate.scalar),
             })
             .collect_vec();
         let assert_consts = layer
             .assert_consts
             .iter()
             .map(|gate| GateCIn {
+                idx_in: gate.idx_in,
                 idx_out: gate.idx_out,
-                constant: constant(&gate.constant),
+                scalar: constant(gate.scalar),
             })
             .collect_vec();
         let lo_out_num_vars = layer.num_vars;
