@@ -13,5 +13,9 @@ goldilocks.workspace = true
 rayon.workspace = true
 serde.workspace = true
 
-[features]
-parallel = [ ]
+[dev-dependencies]
+criterion.workspace = true
+
+[[bench]]
+name = "eq"
+harness = false
