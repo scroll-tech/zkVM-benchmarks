@@ -1,16 +1,17 @@
 use std::cmp::max;
 use std::hash::Hash;
-use std::ops::Add;
 use std::{collections::HashMap, marker::PhantomData, sync::Arc};
 
 use ark_std::rand::Rng;
 use ark_std::{end_timer, start_timer};
 use ff::PrimeField;
 use goldilocks::SmallField;
-use rayon::prelude::{IndexedParallelIterator, IntoParallelRefMutIterator, ParallelIterator};
+use rayon::iter::IntoParallelRefIterator;
+use rayon::prelude::{IndexedParallelIterator, ParallelIterator};
+use rayon::slice::ParallelSliceMut;
 use serde::{Deserialize, Serialize};
 
-use crate::mle::DenseMultilinearExtension;
+use crate::mle::{ArcDenseMultilinearExtension, DenseMultilinearExtension};
 use crate::util::bit_decompose;
 
 #[rustfmt::skip]
@@ -33,10 +34,10 @@ use crate::util::bit_decompose;
 ///
 /// - flattened_ml_extensions stores the multilinear extension representation of
 ///   f0, f1, f2, f3 and f4
-/// - products is 
-///     \[ 
-///         (c0, \[0, 1, 2\]), 
-///         (c1, \[3, 4\]) 
+/// - products is
+///     \[
+///         (c0, \[0, 1, 2\]),
+///         (c1, \[3, 4\])
 ///     \]
 /// - raw_pointers_lookup_table maps fi to i
 ///
@@ -48,7 +49,7 @@ pub struct VirtualPolynomial<F> {
     pub products: Vec<(F, Vec<usize>)>,
     /// Stores multilinear extensions in which product multiplicand can refer
     /// to.
-    pub flattened_ml_extensions: Vec<Arc<DenseMultilinearExtension<F>>>,
+    pub flattened_ml_extensions: Vec<ArcDenseMultilinearExtension<F>>,
     /// Pointers to the above poly extensions
     raw_pointers_lookup_table: HashMap<*const DenseMultilinearExtension<F>, usize>,
 }
@@ -81,26 +82,6 @@ impl<F> VPAuxInfo<F> {
     }
 }
 
-impl<F: SmallField> Add for &VirtualPolynomial<F> {
-    type Output = VirtualPolynomial<F>;
-    fn add(self, other: &VirtualPolynomial<F>) -> Self::Output {
-        let start = start_timer!(|| "virtual poly add");
-        let mut res = self.clone();
-        for products in other.products.iter() {
-            let cur: Vec<Arc<DenseMultilinearExtension<F>>> = products
-                .1
-                .iter()
-                .map(|&x| other.flattened_ml_extensions[x].clone())
-                .collect();
-
-            res.add_mle_list(cur, products.0);
-        }
-        end_timer!(start);
-        res
-    }
-}
-
-// TODO: convert this into a trait
 impl<F: SmallField> VirtualPolynomial<F> {
     /// Creates an empty virtual polynomial with `num_variables`.
     pub fn new(num_variables: usize) -> Self {
@@ -117,8 +98,8 @@ impl<F: SmallField> VirtualPolynomial<F> {
     }
 
     /// Creates an new virtual polynomial from a MLE and its coefficient.
-    pub fn new_from_mle(mle: &Arc<DenseMultilinearExtension<F>>, coefficient: F) -> Self {
-        let mle_ptr: *const DenseMultilinearExtension<F> = Arc::as_ptr(mle);
+    pub fn new_from_mle(mle: ArcDenseMultilinearExtension<F>, coefficient: F) -> Self {
+        let mle_ptr: *const DenseMultilinearExtension<F> = Arc::as_ptr(&mle);
         let mut hm = HashMap::new();
         hm.insert(mle_ptr, 0);
 
@@ -131,7 +112,7 @@ impl<F: SmallField> VirtualPolynomial<F> {
             },
             // here `0` points to the first polynomial of `flattened_ml_extensions`
             products: vec![(coefficient, vec![0])],
-            flattened_ml_extensions: vec![mle.clone()],
+            flattened_ml_extensions: vec![mle],
             raw_pointers_lookup_table: hm,
         }
     }
@@ -142,12 +123,8 @@ impl<F: SmallField> VirtualPolynomial<F> {
     ///
     /// The MLEs will be multiplied together, and then multiplied by the scalar
     /// `coefficient`.
-    pub fn add_mle_list(
-        &mut self,
-        mle_list: impl IntoIterator<Item = Arc<DenseMultilinearExtension<F>>>,
-        coefficient: F,
-    ) {
-        let mle_list: Vec<Arc<DenseMultilinearExtension<F>>> = mle_list.into_iter().collect();
+    pub fn add_mle_list(&mut self, mle_list: Vec<ArcDenseMultilinearExtension<F>>, coefficient: F) {
+        let mle_list: Vec<ArcDenseMultilinearExtension<F>> = mle_list.into_iter().collect();
         let mut indexed_product = Vec::with_capacity(mle_list.len());
 
         assert!(!mle_list.is_empty(), "input mle_list is empty");
@@ -166,7 +143,7 @@ impl<F: SmallField> VirtualPolynomial<F> {
                 indexed_product.push(*index)
             } else {
                 let curr_index = self.flattened_ml_extensions.len();
-                self.flattened_ml_extensions.push(mle.clone());
+                self.flattened_ml_extensions.push(mle);
                 self.raw_pointers_lookup_table.insert(mle_ptr, curr_index);
                 indexed_product.push(curr_index);
             }
@@ -174,11 +151,25 @@ impl<F: SmallField> VirtualPolynomial<F> {
         self.products.push((coefficient, indexed_product));
     }
 
+    /// in-place merge with another virtual polynomial
+    pub fn merge(&mut self, other: &VirtualPolynomial<F>) {
+        let start = start_timer!(|| "virtual poly add");
+        for (coeffient, products) in other.products.iter() {
+            let cur: Vec<ArcDenseMultilinearExtension<F>> = products
+                .iter()
+                .map(|&x| other.flattened_ml_extensions[x].clone())
+                .collect();
+
+            self.add_mle_list(cur, *coeffient);
+        }
+        end_timer!(start);
+    }
+
     /// Multiple the current VirtualPolynomial by an MLE:
     /// - add the MLE to the MLE list;
     /// - multiple each product by MLE and its coefficient.
     /// Returns an error if the MLE has a different `num_vars` from self.
-    pub fn mul_by_mle(&mut self, mle: Arc<DenseMultilinearExtension<F>>, coefficient: F) {
+    pub fn mul_by_mle(&mut self, mle: ArcDenseMultilinearExtension<F>, coefficient: F) {
         let start = start_timer!(|| "mul by mle");
 
         assert_eq!(
@@ -258,7 +249,7 @@ impl<F: SmallField> VirtualPolynomial<F> {
             let (product, product_sum) =
                 DenseMultilinearExtension::random_mle_list(nv, num_multiplicands, rng);
             let coefficient = F::random(&mut rng);
-            poly.add_mle_list(product.into_iter(), coefficient);
+            poly.add_mle_list(product, coefficient);
             sum += product_sum * coefficient;
         }
 
@@ -281,7 +272,7 @@ impl<F: SmallField> VirtualPolynomial<F> {
             let product =
                 DenseMultilinearExtension::random_zero_mle_list(nv, num_multiplicands, rng);
             let coefficient = F::random(&mut rng);
-            poly.add_mle_list(product.into_iter(), coefficient);
+            poly.add_mle_list(product, coefficient);
         }
 
         poly
@@ -378,11 +369,11 @@ pub fn eq_eval<F: PrimeField>(x: &[F], y: &[F]) -> F {
 ///      eq(x,y) = \prod_i=1^num_var (x_i * y_i + (1-x_i)*(1-y_i))
 /// over r, which is
 ///      eq(x,y) = \prod_i=1^num_var (x_i * r_i + (1-x_i)*(1-r_i))
-pub fn build_eq_x_r<F: SmallField>(r: &[F]) -> Arc<DenseMultilinearExtension<F>> {
+pub fn build_eq_x_r<F: SmallField>(r: &[F]) -> ArcDenseMultilinearExtension<F> {
     let evals = build_eq_x_r_vec(r);
     let mle = DenseMultilinearExtension::from_evaluations_vec(r.len(), evals);
 
-    Arc::new(mle)
+    mle.into()
 }
 /// This function build the eq(x, r) polynomial for any given r, and output the
 /// evaluation of eq(x, r) in its vector form.
@@ -403,52 +394,61 @@ pub fn build_eq_x_r_vec<F: PrimeField>(r: &[F]) -> Vec<F> {
     //  1 1 1 1 -> r0       * r1        * r2        * r3
     // we will need 2^num_var evaluations
 
-    let mut eval = Vec::new();
+    let mut eval = vec![F::ZERO; 1 << r.len()];
     build_eq_x_r_helper(r, &mut eval);
 
     eval
 }
 
-/// A helper function to build eq(x, r) recursively.
-/// This function takes `r.len()` steps, and for each step it requires a maximum
-/// `r.len()-1` multiplications.
+/// A helper function to build eq(x, r) via dynamic programing tricks.
+/// This function takes 2^num_var iterations, and per iteration with 1 multiplication.
 fn build_eq_x_r_helper<F: PrimeField>(r: &[F], buf: &mut Vec<F>) {
-    // assert!(!r.is_empty(), "r length is 0");
+    assert!(
+        buf.len() == 1 << r.len(),
+        "invalid buffer length {} giving r size {}",
+        buf.len(),
+        r.len()
+    );
     if r.is_empty() {
         buf.resize(1, F::ZERO);
         buf[0] = F::ONE;
         return;
     }
 
-    if r.len() == 1 {
-        // initializing the buffer with [1-r_0, r_0]
-        buf.push(F::ONE - r[0]);
-        buf.push(r[0]);
-    } else {
-        build_eq_x_r_helper(&r[1..], buf);
+    buf[0] = F::ONE;
+    for (i, r) in r.iter().rev().enumerate() {
+        let size = 1 << (i + 1);
+        // suppose at the previous step we processed buf [0..size]
+        // for the current step we are populating new buf[0..2*size]
+        // for j travese 0..size
+        // buf[2*j + 1] = r * buf[j]
+        // buf[2*j] = (1 - r) * buf[j]
+        if size <= 2 {
+            buf[0] = F::ONE - *r;
+            buf[1] = *r;
+        } else {
+            let (half_buf_len, quar_buf_len) = (size >> 1, size >> 2);
+            let (low_buf, high_buf) = buf.split_at_mut(half_buf_len);
 
-        // suppose at the previous step we received [b_1, ..., b_k]
-        // for the current step we will need
-        // if x_0 = 0:   (1-r0) * [b_1, ..., b_k]
-        // if x_0 = 1:   r0 * [b_1, ..., b_k]
-        // let mut res = vec![];
-        // for &b_i in buf.iter() {
-        //     let tmp = r[0] * b_i;
-        //     res.push(b_i - tmp);
-        //     res.push(tmp);
-        // }
-        // *buf = res;
-
-        let mut res = vec![F::ZERO; buf.len() << 1];
-        res.par_iter_mut().enumerate().for_each(|(i, val)| {
-            let bi = buf[i >> 1];
-            let tmp = r[0] * bi;
-            if i & 1 == 0 {
-                *val = bi - tmp;
-            } else {
-                *val = tmp;
+            // update second half in-place parallelly
+            // use buf[quar_buf_len..half_buf_len] to update buf[half_buf_len..size]
+            high_buf
+                .par_chunks_mut(2)
+                .with_min_len(64)
+                .zip(low_buf.par_iter().skip(quar_buf_len))
+                .for_each(|(buf, prev_val)| {
+                    assert!(buf.len() == 2);
+                    let tmp = *r * prev_val;
+                    buf[1] = tmp;
+                    buf[0] = *prev_val - tmp;
+                });
+            // update first half in-place sequentially
+            // use buf[0..quar_buf_len] to update buf[0..half_buf_len], in reverse order
+            for j in (0..quar_buf_len).rev() {
+                let tmp = *r * buf[j];
+                buf[(j << 1) + 1] = tmp;
+                buf[j << 1] = buf[j] - tmp;
             }
-        });
-        *buf = res;
+        }
     }
 }
