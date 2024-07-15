@@ -7,7 +7,7 @@ use gkr::utils::MultilinearExtensionFromVectors;
 use goldilocks::SmallField;
 use itertools::Itertools;
 use simple_frontend::structs::CellId;
-use singer_utils::structs::UInt;
+use singer_utils::uint::UInt;
 use std::collections::BTreeMap;
 
 use crate::instructions::InstCircuit;
@@ -84,6 +84,7 @@ pub(crate) fn test_opcode_circuit<Ext: ExtensionField>(
 
     #[cfg(feature = "test-dbg")]
     println!("{:?}", circuit_witness);
+    // dbg!(&circuit_witness);
 
     circuit_witness.check_correctness(&circuit);
 
