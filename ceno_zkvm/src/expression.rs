@@ -373,7 +373,7 @@ impl<E: ExtensionField> Mul for Expression<E> {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy)]
 pub struct WitIn {
     pub id: WitnessId,
 }

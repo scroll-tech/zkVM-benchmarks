@@ -20,18 +20,18 @@ pub struct AddInstruction;
 pub struct SubInstruction;
 
 pub struct InstructionConfig<E: ExtensionField> {
-    pub pc: PCUInt,
-    pub ts: TSUInt,
-    pub prev_rd_value: UInt64,
-    pub addend_0: UInt64,
-    pub addend_1: UInt64,
-    pub outcome: UInt64,
+    pub pc: PCUInt<E>,
+    pub ts: TSUInt<E>,
+    pub prev_rd_value: UInt64<E>,
+    pub addend_0: UInt64<E>,
+    pub addend_1: UInt64<E>,
+    pub outcome: UInt64<E>,
     pub rs1_id: WitIn,
     pub rs2_id: WitIn,
     pub rd_id: WitIn,
-    pub prev_rs1_ts: TSUInt,
-    pub prev_rs2_ts: TSUInt,
-    pub prev_rd_ts: TSUInt,
+    pub prev_rs1_ts: TSUInt<E>,
+    pub prev_rs2_ts: TSUInt<E>,
+    pub prev_rd_ts: TSUInt<E>,
     phantom: PhantomData<E>,
 }
 
@@ -56,21 +56,30 @@ fn add_sub_gadget<E: ExtensionField, const IS_ADD: bool>(
 
     // Execution result = addend0 + addend1, with carry.
     let prev_rd_value = UInt64::new(circuit_builder);
-    let addend_0 = UInt64::new(circuit_builder);
-    let addend_1 = UInt64::new(circuit_builder);
-    let outcome = UInt64::new(circuit_builder);
 
-    // TODO IS_ADD to deal with add/sub
-    let computed_outcome = addend_0.add(circuit_builder, &addend_1)?;
-    outcome.eq(circuit_builder, &computed_outcome)?;
+    let (addend_0, addend_1, outcome) = if IS_ADD {
+        // outcome = addend_0 + addend_1
+        let addend_0 = UInt64::new(circuit_builder);
+        let addend_1 = UInt64::new(circuit_builder);
+        (
+            addend_0.clone(),
+            addend_1.clone(),
+            addend_0.add(circuit_builder, &addend_1)?,
+        )
+    } else {
+        // outcome + addend_1 = addend_0
+        let outcome = UInt64::new(circuit_builder);
+        let addend_1 = UInt64::new(circuit_builder);
+        (
+            addend_1.clone().add(circuit_builder, &outcome.clone())?,
+            addend_1,
+            outcome,
+        )
+    };
 
-    // TODO rs1_id, rs2_id, rd_id should be bytecode lookup
     let rs1_id = circuit_builder.create_witin();
     let rs2_id = circuit_builder.create_witin();
     let rd_id = circuit_builder.create_witin();
-    circuit_builder.assert_u5(rs1_id.expr())?;
-    circuit_builder.assert_u5(rs2_id.expr())?;
-    circuit_builder.assert_u5(rd_id.expr())?;
 
     // TODO remove me, this is just for testing degree > 1 sumcheck in main constraints
     circuit_builder.require_zero(rs1_id.expr() * rs1_id.expr() - rs1_id.expr() * rs1_id.expr())?;
@@ -80,7 +89,6 @@ fn add_sub_gadget<E: ExtensionField, const IS_ADD: bool>(
     let mut prev_rd_ts = TSUInt::new(circuit_builder);
 
     let mut ts = circuit_builder.register_read(&rs1_id, &mut prev_rs1_ts, &mut ts, &addend_0)?;
-
     let mut ts = circuit_builder.register_read(&rs2_id, &mut prev_rs2_ts, &mut ts, &addend_1)?;
 
     let ts = circuit_builder.register_write(
@@ -88,7 +96,7 @@ fn add_sub_gadget<E: ExtensionField, const IS_ADD: bool>(
         &mut prev_rd_ts,
         &mut ts,
         &prev_rd_value,
-        &computed_outcome,
+        &outcome,
     )?;
 
     let next_ts = ts.add_const(circuit_builder, 1.into())?;
@@ -152,6 +160,7 @@ mod test {
     use super::AddInstruction;
 
     #[test]
+    #[ignore = "hit tower verification bug, PR#165"]
     fn test_add_construct_circuit() {
         let mut rng = test_rng();
 
