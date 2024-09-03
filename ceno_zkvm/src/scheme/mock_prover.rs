@@ -105,10 +105,10 @@ impl<'a, E: ExtensionField> MockProver<E> {
                 let left = left.neg().neg(); // TODO get_ext_field_vec doesn't work without this
                 let right = right.neg();
 
-                let left_evaluated = wit_infer_by_expr(wits_in, &challenge, &left);
+                let left_evaluated = wit_infer_by_expr(&[], wits_in, &challenge, &left);
                 let left_evaluated = left_evaluated.get_ext_field_vec();
 
-                let right_evaluated = wit_infer_by_expr(wits_in, &challenge, &right);
+                let right_evaluated = wit_infer_by_expr(&[], wits_in, &challenge, &right);
                 let right_evaluated = right_evaluated.get_ext_field_vec();
 
                 for (left_element, right_element) in left_evaluated.iter().zip_eq(right_evaluated) {
@@ -124,7 +124,7 @@ impl<'a, E: ExtensionField> MockProver<E> {
                 }
             } else {
                 let expr = expr.clone().neg().neg(); // TODO get_ext_field_vec doesn't work without this
-                let expr_evaluated = wit_infer_by_expr(wits_in, &challenge, &expr);
+                let expr_evaluated = wit_infer_by_expr(&[], wits_in, &challenge, &expr);
                 let expr_evaluated = expr_evaluated.get_ext_field_vec();
 
                 for element in expr_evaluated {
@@ -150,7 +150,7 @@ impl<'a, E: ExtensionField> MockProver<E> {
             .iter()
             .zip_eq(cb.cs.lk_expressions_namespace_map.iter())
         {
-            let expr_evaluated = wit_infer_by_expr(wits_in, &challenge, expr);
+            let expr_evaluated = wit_infer_by_expr(&[], wits_in, &challenge, expr);
             let expr_evaluated = expr_evaluated.get_ext_field_vec();
 
             // Check each lookup expr exists in t vec
