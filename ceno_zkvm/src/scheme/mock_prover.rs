@@ -309,6 +309,7 @@ mod tests {
     }
 
     #[test]
+    // TODO: add it back after the support of missing lookup
     fn test_lookup_error() {
         let mut cs = ConstraintSystem::new(|| "test_lookup_error");
         let mut builder = CircuitBuilder::<GoldilocksExt2>::new(&mut cs);
