@@ -77,6 +77,10 @@ impl StepRecord {
     pub fn memory_op(&self) -> Option<WriteOp> {
         self.memory_op.clone()
     }
+
+    pub fn is_busy_loop(&self) -> bool {
+        self.pc.before == self.pc.after
+    }
 }
 
 #[derive(Debug)]
