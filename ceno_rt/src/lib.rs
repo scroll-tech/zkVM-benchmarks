@@ -1,9 +1,11 @@
 #![no_std]
 
+use core::arch::{asm, global_asm};
+
+mod allocator;
+
 mod io;
 pub use io::info_out;
-
-use core::arch::{asm, global_asm};
 
 mod params;
 pub use params::*;
