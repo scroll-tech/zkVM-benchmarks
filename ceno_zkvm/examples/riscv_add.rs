@@ -1,7 +1,10 @@
 use std::time::Instant;
 
 use ark_std::test_rng;
-use ceno_zkvm::{instructions::riscv::addsub::AddInstruction, scheme::prover::ZKVMProver};
+use ceno_zkvm::{
+    instructions::riscv::addsub::AddInstruction, scheme::prover::ZKVMProver,
+    tables::ProgramTableCircuit,
+};
 use clap::Parser;
 use const_env::from_env;
 
@@ -90,11 +93,20 @@ fn main() {
     let mut zkvm_cs = ZKVMConstraintSystem::default();
     let add_config = zkvm_cs.register_opcode_circuit::<AddInstruction<E>>();
     let range_config = zkvm_cs.register_table_circuit::<RangeTableCircuit<E>>();
+    let prog_config = zkvm_cs.register_table_circuit::<ProgramTableCircuit<E>>();
 
     let mut zkvm_fixed_traces = ZKVMFixedTraces::default();
     zkvm_fixed_traces.register_opcode_circuit::<AddInstruction<E>>(&zkvm_cs);
-    zkvm_fixed_traces
-        .register_table_circuit::<RangeTableCircuit<E>>(&zkvm_cs, range_config.clone());
+    zkvm_fixed_traces.register_table_circuit::<RangeTableCircuit<E>>(
+        &zkvm_cs,
+        range_config.clone(),
+        &(),
+    );
+    zkvm_fixed_traces.register_table_circuit::<ProgramTableCircuit<E>>(
+        &zkvm_cs,
+        prog_config.clone(),
+        &PROGRAM_ADD_LOOP,
+    );
 
     let pk = zkvm_cs
         .clone()
@@ -136,7 +148,14 @@ fn main() {
         zkvm_witness.finalize_lk_multiplicities();
         // assign table circuits
         zkvm_witness
-            .assign_table_circuit::<RangeTableCircuit<E>>(&zkvm_cs, &range_config)
+            .assign_table_circuit::<RangeTableCircuit<E>>(&zkvm_cs, &range_config, &())
+            .unwrap();
+        zkvm_witness
+            .assign_table_circuit::<ProgramTableCircuit<E>>(
+                &zkvm_cs,
+                &prog_config,
+                &PROGRAM_ADD_LOOP.len(),
+            )
             .unwrap();
 
         let timer = Instant::now();

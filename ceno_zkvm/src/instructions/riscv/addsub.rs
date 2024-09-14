@@ -6,7 +6,10 @@ use itertools::Itertools;
 
 use super::{
     config::ExprLtConfig,
-    constants::{OPType, OpcodeType, RegUInt, PC_STEP_SIZE},
+    constants::{
+        OPType, OpcodeType, RegUInt, FUNCT3_ADD_SUB, FUNCT7_ADD, FUNCT7_SUB, OPCODE_OP,
+        PC_STEP_SIZE,
+    },
     RIVInstruction,
 };
 use crate::{
@@ -16,6 +19,7 @@ use crate::{
     expression::{ToExpr, WitIn},
     instructions::{riscv::config::ExprLtInput, Instruction},
     set_val,
+    tables::InsnRecord,
     uint::UIntValue,
     witness::LkMultiplicity,
 };
@@ -93,6 +97,17 @@ fn add_sub_gadget<E: ExtensionField, const IS_ADD: bool>(
     let rs2_id = circuit_builder.create_witin(|| "rs2_id")?;
     let rd_id = circuit_builder.create_witin(|| "rd_id")?;
 
+    // Fetch the instruction.
+    circuit_builder.lk_fetch(&InsnRecord::new(
+        pc.expr(),
+        OPCODE_OP.into(),
+        rd_id.expr(),
+        FUNCT3_ADD_SUB.into(),
+        rs1_id.expr(),
+        rs2_id.expr(),
+        (if IS_ADD { FUNCT7_ADD } else { FUNCT7_SUB }).into(),
+    ))?;
+
     let prev_rs1_ts = circuit_builder.create_witin(|| "prev_rs1_ts")?;
     let prev_rs2_ts = circuit_builder.create_witin(|| "prev_rs2_ts")?;
     let prev_rd_ts = circuit_builder.create_witin(|| "prev_rd_ts")?;
@@ -145,6 +160,7 @@ fn add_sub_assignment<E: ExtensionField, const IS_ADD: bool>(
     lk_multiplicity: &mut LkMultiplicity,
     step: &StepRecord,
 ) -> Result<(), ZKVMError> {
+    lk_multiplicity.fetch(step.pc().before.0);
     set_val!(instance, config.pc, step.pc().before.0 as u64);
     set_val!(instance, config.ts, step.cycle());
     let addend_1 = UIntValue::new_unchecked(step.rs2().unwrap().value);
@@ -268,7 +284,7 @@ impl<E: ExtensionField> Instruction<E> for SubInstruction<E> {
 
 #[cfg(test)]
 mod test {
-    use ceno_emul::{Change, ReadOp, StepRecord, WriteOp};
+    use ceno_emul::{Change, ReadOp, StepRecord, WriteOp, CENO_PLATFORM};
     use goldilocks::GoldilocksExt2;
     use itertools::Itertools;
     use multilinear_extensions::mle::IntoMLEs;
@@ -276,7 +292,7 @@ mod test {
     use crate::{
         circuit_builder::{CircuitBuilder, ConstraintSystem},
         instructions::{riscv::constants::PC_STEP_SIZE, Instruction},
-        scheme::mock_prover::MockProver,
+        scheme::mock_prover::{MockProver, MOCK_PC_ADD, MOCK_PC_SUB, MOCK_PROGRAM},
     };
 
     use super::{AddInstruction, SubInstruction};
@@ -302,22 +318,20 @@ mod test {
             cb.cs.num_witin as usize,
             vec![StepRecord {
                 cycle: 3,
-                pc: Change {
-                    before: 2u32.into(),
-                    after: (2u32 + PC_STEP_SIZE as u32).into(),
-                },
+                pc: Change::new(MOCK_PC_ADD, MOCK_PC_ADD + PC_STEP_SIZE),
+                insn_code: MOCK_PROGRAM[0],
                 rs1: Some(ReadOp {
-                    addr: 2.into(),
+                    addr: CENO_PLATFORM.register_vma(2).into(),
                     value: 11u32,
                     previous_cycle: 0,
                 }),
                 rs2: Some(ReadOp {
-                    addr: 3.into(),
+                    addr: CENO_PLATFORM.register_vma(3).into(),
                     value: 0xfffffffeu32,
                     previous_cycle: 0,
                 }),
                 rd: Some(WriteOp {
-                    addr: 4.into(),
+                    addr: CENO_PLATFORM.register_vma(4).into(),
                     value: Change {
                         before: 0u32,
                         after: 11u32.wrapping_add(0xfffffffeu32),
@@ -362,22 +376,20 @@ mod test {
             cb.cs.num_witin as usize,
             vec![StepRecord {
                 cycle: 3,
-                pc: Change {
-                    before: 2u32.into(),
-                    after: (2u32 + PC_STEP_SIZE as u32).into(),
-                },
+                pc: Change::new(MOCK_PC_ADD, MOCK_PC_ADD + PC_STEP_SIZE),
+                insn_code: MOCK_PROGRAM[0],
                 rs1: Some(ReadOp {
-                    addr: 2.into(),
+                    addr: CENO_PLATFORM.register_vma(2).into(),
                     value: u32::MAX - 1,
                     previous_cycle: 0,
                 }),
                 rs2: Some(ReadOp {
-                    addr: 3.into(),
+                    addr: CENO_PLATFORM.register_vma(3).into(),
                     value: u32::MAX - 1,
                     previous_cycle: 0,
                 }),
                 rd: Some(WriteOp {
-                    addr: 4.into(),
+                    addr: CENO_PLATFORM.register_vma(4).into(),
                     value: Change {
                         before: 0u32,
                         after: (u32::MAX - 1).wrapping_add(u32::MAX - 1),
@@ -422,22 +434,20 @@ mod test {
             cb.cs.num_witin as usize,
             vec![StepRecord {
                 cycle: 3,
-                pc: Change {
-                    before: 2u32.into(),
-                    after: (2u32 + PC_STEP_SIZE as u32).into(),
-                },
+                pc: Change::new(MOCK_PC_SUB, MOCK_PC_SUB + PC_STEP_SIZE),
+                insn_code: MOCK_PROGRAM[1],
                 rs1: Some(ReadOp {
-                    addr: 2.into(),
+                    addr: CENO_PLATFORM.register_vma(2).into(),
                     value: 11u32,
                     previous_cycle: 0,
                 }),
                 rs2: Some(ReadOp {
-                    addr: 3.into(),
+                    addr: CENO_PLATFORM.register_vma(3).into(),
                     value: 2u32,
                     previous_cycle: 0,
                 }),
                 rd: Some(WriteOp {
-                    addr: 4.into(),
+                    addr: CENO_PLATFORM.register_vma(4).into(),
                     value: Change {
                         before: 0u32,
                         after: 11u32.wrapping_sub(2u32),
@@ -482,22 +492,20 @@ mod test {
             cb.cs.num_witin as usize,
             vec![StepRecord {
                 cycle: 3,
-                pc: Change {
-                    before: 2u32.into(),
-                    after: (2u32 + PC_STEP_SIZE as u32).into(),
-                },
+                pc: Change::new(MOCK_PC_SUB, MOCK_PC_SUB + PC_STEP_SIZE),
+                insn_code: MOCK_PROGRAM[1],
                 rs1: Some(ReadOp {
-                    addr: 2.into(),
+                    addr: CENO_PLATFORM.register_vma(2).into(),
                     value: 3u32,
                     previous_cycle: 0,
                 }),
                 rs2: Some(ReadOp {
-                    addr: 3.into(),
+                    addr: CENO_PLATFORM.register_vma(3).into(),
                     value: 11u32,
                     previous_cycle: 0,
                 }),
                 rd: Some(WriteOp {
-                    addr: 4.into(),
+                    addr: CENO_PLATFORM.register_vma(4).into(),
                     value: Change {
                         before: 0u32,
                         after: 3u32.wrapping_sub(11u32),
