@@ -2,6 +2,7 @@ use std::time::Instant;
 
 use ark_std::test_rng;
 use ceno_zkvm::{instructions::riscv::addsub::AddInstruction, scheme::prover::ZKVMProver};
+use clap::Parser;
 use const_env::from_env;
 
 use ceno_emul::{ByteAddr, InsnKind::ADD, StepRecord, VMState, CENO_PLATFORM};
@@ -26,6 +27,7 @@ const RAYON_NUM_THREADS: usize = 8;
 //  - x2 is initialized to -1,
 //  - x3 is initialized to loop bound.
 // we use x4 to hold the acc_sum.
+#[allow(clippy::unusual_byte_groupings)]
 const PROGRAM_ADD_LOOP: [u32; 4] = [
     // func7   rs2   rs1   f3  rd    opcode
     0b_0000000_00100_00001_000_00100_0110011, // add x4, x4, x1 <=> addi x4, x4, 1
@@ -34,7 +36,21 @@ const PROGRAM_ADD_LOOP: [u32; 4] = [
     0b_000000000000_00000_000_00000_1110011,  // ecall halt
 ];
 
+/// Simple program to greet a person
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// start round
+    #[arg(short, long, default_value_t = 8)]
+    start: u8,
+
+    /// end round
+    #[arg(short, long, default_value_t = 22)]
+    end: u8,
+}
+
 fn main() {
+    let args = Args::parse();
     type E = GoldilocksExt2;
 
     let max_threads = {
@@ -90,8 +106,8 @@ fn main() {
     let prover = ZKVMProver::new(pk);
     let verifier = ZKVMVerifier::new(vk);
 
-    for instance_num_vars in 8..22 {
-        let num_instances = 1 << instance_num_vars;
+    for instance_num_vars in args.start..args.end {
+        let step_loop = 1 << (instance_num_vars - 1); // 1 step in loop contribute to 2 add instance
         let mut vm = VMState::new(CENO_PLATFORM);
         let pc_start = ByteAddr(CENO_PLATFORM.pc_start()).waddr();
 
@@ -99,7 +115,7 @@ fn main() {
         // vm.x4 += vm.x1
         vm.init_register_unsafe(1usize, 1);
         vm.init_register_unsafe(2usize, u32::MAX); // -1 in two's complement
-        vm.init_register_unsafe(3usize, num_instances as u32);
+        vm.init_register_unsafe(3usize, step_loop as u32);
         for (i, inst) in PROGRAM_ADD_LOOP.iter().enumerate() {
             vm.init_memory(pc_start + i, *inst);
         }
@@ -133,17 +149,17 @@ fn main() {
             .create_proof(zkvm_witness, max_threads, &mut transcript, &real_challenges)
             .expect("create_proof failed");
 
+        println!(
+            "AddInstruction::create_proof, instance_num_vars = {}, time = {}",
+            instance_num_vars,
+            timer.elapsed().as_secs_f64()
+        );
+
         let mut transcript = Transcript::new(b"riscv");
         assert!(
             verifier
                 .verify_proof(zkvm_proof, &mut transcript, &real_challenges)
                 .expect("verify proof return with error"),
-        );
-
-        println!(
-            "AddInstruction::create_proof, instance_num_vars = {}, time = {}",
-            instance_num_vars,
-            timer.elapsed().as_secs_f64()
         );
     }
 }
