@@ -721,6 +721,16 @@ mod tests {
             witness_values: Vec<u64>,
             overflow: bool,
         ) {
+            let pow_of_c: u64 = 2_usize.pow(UInt::<M, C, E>::MAX_CELL_BIT_WIDTH as u32) as u64;
+            let single_wit_size = UInt::<M, C, E>::NUM_CELLS;
+            if overflow {
+                assert_eq!(
+                    witness_values.len() % single_wit_size,
+                    0,
+                    "witness len is incorrect"
+                )
+            }
+
             let mut cs = ConstraintSystem::new(|| "test_mul");
             let mut cb = CircuitBuilder::<E>::new(&mut cs);
             let challenges = (0..witness_values.len()).map(|_| 1.into()).collect_vec();
@@ -731,8 +741,6 @@ mod tests {
                 .mul(|| "uint_c", &mut cb, &mut uint_b, overflow)
                 .unwrap();
 
-            let pow_of_c: u64 = 2_usize.pow(UInt::<M, C, E>::MAX_CELL_BIT_WIDTH as u32) as u64;
-            let single_wit_size = UInt::<M, C, E>::NUM_CELLS;
             let wit_end_idx = if overflow {
                 4 * single_wit_size
             } else {
