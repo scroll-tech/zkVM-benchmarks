@@ -385,7 +385,7 @@ pub mod test_util {
                 Pcs::trim(&param, poly_size).unwrap()
             };
             // Commit and open
-            let (comm, eval, proof) = {
+            let (comm, eval, proof, challenge) = {
                 let mut transcript = Transcript::new(b"BaseFold");
                 let poly = if base {
                     DenseMultilinearExtension::random(num_vars, &mut OsRng)
@@ -406,6 +406,7 @@ pub mod test_util {
                     Pcs::get_pure_commitment(&comm),
                     eval,
                     Pcs::open(&pp, &poly, &comm, &point, &eval, &mut transcript).unwrap(),
+                    transcript.read_challenge(),
                 )
             };
             // Verify
@@ -417,6 +418,9 @@ pub mod test_util {
                     .collect::<Vec<_>>();
                 transcript.append_field_element_ext(&eval);
                 let result = Pcs::verify(&vp, &comm, &point, &eval, &proof, &mut transcript);
+
+                let v_challenge = transcript.read_challenge();
+                assert_eq!(challenge, v_challenge);
 
                 result
             };
@@ -450,7 +454,7 @@ pub mod test_util {
             .unique()
             .collect_vec();
 
-            let (comms, points, evals, proof) = {
+            let (comms, points, evals, proof, challenge) = {
                 let mut transcript = Transcript::new(b"BaseFold");
                 let polys = (0..batch_size)
                     .map(|i| {
@@ -497,7 +501,7 @@ pub mod test_util {
 
                 let proof =
                     Pcs::batch_open(&pp, &polys, &comms, &points, &evals, &mut transcript).unwrap();
-                (comms, points, evals, proof)
+                (comms, points, evals, proof, transcript.read_challenge())
             };
             // Batch verify
             let result = {
@@ -530,6 +534,8 @@ pub mod test_util {
 
                 let result =
                     Pcs::batch_verify(&vp, &comms, &points, &evals, &proof, &mut transcript);
+                let v_challenge = transcript.read_challenge();
+                assert_eq!(challenge, v_challenge);
                 result
             };
 
@@ -555,7 +561,7 @@ pub mod test_util {
                 Pcs::trim(&param, poly_size).unwrap()
             };
 
-            let (comm, evals, proof) = {
+            let (comm, evals, proof, challenge) = {
                 let mut transcript = Transcript::new(b"BaseFold");
                 let polys = (0..batch_size)
                     .map(|_| {
@@ -593,7 +599,12 @@ pub mod test_util {
                     &mut transcript,
                 )
                 .unwrap();
-                (Pcs::get_pure_commitment(&comm), evals, proof)
+                (
+                    Pcs::get_pure_commitment(&comm),
+                    evals,
+                    proof,
+                    transcript.read_challenge(),
+                )
             };
             // Batch verify
             let result = {
@@ -608,6 +619,9 @@ pub mod test_util {
 
                 let result =
                     Pcs::simple_batch_verify(&vp, &comm, &point, &evals, &proof, &mut transcript);
+
+                let v_challenge = transcript.read_challenge();
+                assert_eq!(challenge, v_challenge);
                 result
             };
 
