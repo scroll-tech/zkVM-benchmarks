@@ -43,10 +43,10 @@ impl<E: ExtensionField, I: RIVInstruction> Instruction<E> for ArithInstruction<E
         // outcome = dividend / divisor + remainder => dividend = divisor * outcome + r
         let mut divisor = UInt::new_unchecked(|| "divisor", circuit_builder)?;
         let mut outcome = UInt::new(|| "outcome", circuit_builder)?;
-        let mut r = UInt::new(|| "remainder", circuit_builder)?;
+        let r = UInt::new(|| "remainder", circuit_builder)?;
 
         let (inter_mul_value, dividend) =
-            divisor.mul_add(|| "dividend", circuit_builder, &mut outcome, &mut r, true)?;
+            divisor.mul_add(|| "dividend", circuit_builder, &mut outcome, &r, true)?;
 
         // div by zero check
         let is_zero = IsZeroConfig::construct_circuit(circuit_builder, divisor.value())?;

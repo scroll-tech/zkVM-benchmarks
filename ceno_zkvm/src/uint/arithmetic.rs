@@ -185,7 +185,7 @@ impl<const M: usize, const C: usize, E: ExtensionField> UIntLimbs<M, C, E> {
         name_fn: N,
         circuit_builder: &mut CircuitBuilder<E>,
         multiplier: &mut UIntLimbs<M, C, E>,
-        addend: &mut UIntLimbs<M, C, E>,
+        addend: &UIntLimbs<M, C, E>,
         with_overflow: bool,
     ) -> Result<(UIntLimbs<M, C, E>, UIntLimbs<M, C, E>), ZKVMError> {
         circuit_builder.namespace(name_fn, |cb| {
@@ -206,7 +206,10 @@ impl<const M: usize, const C: usize, E: ExtensionField> UIntLimbs<M, C, E> {
     ) -> Result<(), ZKVMError> {
         circuit_builder.namespace(name_fn, |cb| {
             izip!(self.expr(), rhs.expr())
-                .try_for_each(|(lhs, rhs)| cb.require_equal(|| "uint_eq", lhs, rhs))
+                .enumerate()
+                .try_for_each(|(i, (lhs, rhs))| {
+                    cb.require_equal(|| format!("uint_eq_{i}"), lhs, rhs)
+                })
         })
     }
 
