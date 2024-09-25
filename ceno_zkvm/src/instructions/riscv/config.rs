@@ -189,6 +189,7 @@ impl UIntLtInput<'_> {
     }
 }
 
+// TODO move ExprLtConfig to gadgets
 #[derive(Debug)]
 pub struct ExprLtConfig {
     pub is_lt: Option<WitIn>,
