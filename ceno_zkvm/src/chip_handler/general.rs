@@ -243,7 +243,6 @@ impl<'a, E: ExtensionField> CircuitBuilder<'a, E> {
         Ok(())
     }
 
-    #[allow(dead_code)]
     pub(crate) fn assert_bit<NR, N>(
         &mut self,
         name_fn: N,
@@ -253,7 +252,13 @@ impl<'a, E: ExtensionField> CircuitBuilder<'a, E> {
         NR: Into<String>,
         N: FnOnce() -> NR,
     {
-        self.require_zero(name_fn, expr.clone() * (Expression::ONE - expr))
+        self.namespace(
+            || "assert_bit",
+            |cb| {
+                cb.cs
+                    .require_zero(name_fn, expr.clone() * (Expression::ONE - expr))
+            },
+        )
     }
 
     /// Assert `rom_type(a, b) = c` and that `a, b, c` are all bytes.
