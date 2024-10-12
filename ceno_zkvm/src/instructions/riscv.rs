@@ -23,6 +23,9 @@ mod u_insn;
 
 mod ecall_insn;
 
+mod im_insn;
+mod mem;
+mod s_insn;
 #[cfg(test)]
 mod test;
 
