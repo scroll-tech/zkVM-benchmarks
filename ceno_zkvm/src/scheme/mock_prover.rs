@@ -716,10 +716,12 @@ mod tests {
     use multilinear_extensions::mle::IntoMLE;
 
     #[derive(Debug)]
-    #[allow(dead_code)]
     struct AssertZeroCircuit {
+        #[allow(dead_code)]
         pub a: WitIn,
+        #[allow(dead_code)]
         pub b: WitIn,
+        #[allow(dead_code)]
         pub c: WitIn,
     }
 
@@ -847,7 +849,6 @@ mod tests {
         assert_eq!(err[0].inst_id(), 0);
     }
 
-    #[allow(dead_code)]
     #[derive(Debug)]
     struct AssertLtCircuit {
         pub a: WitIn,
