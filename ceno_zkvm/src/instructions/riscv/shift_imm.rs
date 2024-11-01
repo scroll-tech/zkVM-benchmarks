@@ -84,17 +84,9 @@ impl<E: ExtensionField, I: RIVInstruction> Instruction<E> for ShiftImmInstructio
             InsnKind::SRAI | InsnKind::SRLI => {
                 let (inflow, is_lt_config) = match I::INST_KIND {
                     InsnKind::SRAI => {
-                        let max_signed_limb_expr: Expression<_> =
-                            ((1 << (UInt::<E>::LIMB_BITS - 1)) - 1).into();
-                        let is_rs1_neg = IsLtConfig::construct_circuit(
-                            circuit_builder,
-                            || "lhs_msb",
-                            max_signed_limb_expr,
-                            rs1_read.limbs.iter().last().unwrap().expr(), // msb limb
-                            1,
-                        )?;
+                        let is_rs1_neg = rs1_read.is_negative(circuit_builder, || "lhs_msb")?;
                         let msb_expr: Expression<E> = is_rs1_neg.is_lt.expr();
-                        let ones = imm.expr() - Expression::ONE;
+                        let ones = imm.expr() - 1;
                         (msb_expr * ones, Some(is_rs1_neg))
                     }
                     InsnKind::SRLI => (Expression::ZERO, None),

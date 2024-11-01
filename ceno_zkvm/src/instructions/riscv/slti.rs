@@ -11,7 +11,7 @@ use super::{
 use crate::{
     circuit_builder::CircuitBuilder,
     error::ZKVMError,
-    expression::{Expression, ToExpr, WitIn},
+    expression::{ToExpr, WitIn},
     gadgets::IsLtConfig,
     instructions::Instruction,
     set_val,
@@ -62,15 +62,7 @@ impl<E: ExtensionField, I: RIVInstruction> Instruction<E> for SetLessThanImmInst
         let (value_expr, is_rs1_neg) = match I::INST_KIND {
             InsnKind::SLTIU => (rs1_read.value(), None),
             InsnKind::SLTI => {
-                let max_signed_limb_expr: Expression<_> =
-                    ((1 << (UInt::<E>::LIMB_BITS - 1)) - 1).into();
-                let is_rs1_neg = IsLtConfig::construct_circuit(
-                    cb,
-                    || "lhs_msb",
-                    max_signed_limb_expr,
-                    rs1_read.limbs.iter().last().unwrap().expr(), // msb limb
-                    1,
-                )?;
+                let is_rs1_neg = rs1_read.is_negative(cb, || "lhs_msb")?;
                 (rs1_read.to_field_expr(is_rs1_neg.expr()), Some(is_rs1_neg))
             }
             _ => unreachable!("Unsupported instruction kind {:?}", I::INST_KIND),
