@@ -12,7 +12,7 @@ use crate::{
     circuit_builder::CircuitBuilder,
     error::ZKVMError,
     expression::{ToExpr, WitIn},
-    gadgets::IsLtConfig,
+    gadgets::{IsLtConfig, SignedExtendConfig},
     instructions::Instruction,
     set_val,
     tables::InsnRecord,
@@ -32,7 +32,7 @@ pub struct SetLessThanImmConfig<E: ExtensionField> {
     lt: IsLtConfig,
 
     // SLTI
-    is_rs1_neg: Option<IsLtConfig>,
+    is_rs1_neg: Option<SignedExtendConfig<E>>,
 }
 
 pub struct SetLessThanImmInstruction<E, I>(PhantomData<(E, I)>);
@@ -62,7 +62,7 @@ impl<E: ExtensionField, I: RIVInstruction> Instruction<E> for SetLessThanImmInst
         let (value_expr, is_rs1_neg) = match I::INST_KIND {
             InsnKind::SLTIU => (rs1_read.value(), None),
             InsnKind::SLTI => {
-                let is_rs1_neg = rs1_read.is_negative(cb, || "lhs_msb")?;
+                let is_rs1_neg = rs1_read.is_negative(cb)?;
                 (rs1_read.to_field_expr(is_rs1_neg.expr()), Some(is_rs1_neg))
             }
             _ => unreachable!("Unsupported instruction kind {:?}", I::INST_KIND),
@@ -100,7 +100,6 @@ impl<E: ExtensionField, I: RIVInstruction> Instruction<E> for SetLessThanImmInst
         config.i_insn.assign_instance(instance, lkm, step)?;
 
         let rs1 = step.rs1().unwrap().value;
-        let max_signed_limb = (1u64 << (UInt::<E>::LIMB_BITS - 1)) - 1;
         let rs1_value = Value::new_unchecked(rs1 as Word);
         config
             .rs1_read
@@ -120,8 +119,7 @@ impl<E: ExtensionField, I: RIVInstruction> Instruction<E> for SetLessThanImmInst
                 config.is_rs1_neg.as_ref().unwrap().assign_instance(
                     instance,
                     lkm,
-                    max_signed_limb,
-                    *rs1_value.limbs.last().unwrap() as u64,
+                    *rs1_value.as_u16_limbs().last().unwrap() as u64,
                 )?;
                 config
                     .lt
