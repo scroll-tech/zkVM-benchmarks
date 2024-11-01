@@ -34,12 +34,12 @@ macro_rules! declare_program {
 pub struct InsnRecord<T>([T; 7]);
 
 impl<T> InsnRecord<T> {
-    pub fn new(pc: T, opcode: T, rd: Option<T>, funct3: T, rs1: T, rs2: T, imm_or_funct7: T) -> Self
+    pub fn new(pc: T, opcode: T, rd: Option<T>, funct3: T, rs1: T, rs2: T, imm_internal: T) -> Self
     where
         T: From<u32>,
     {
         let rd = rd.unwrap_or_else(|| T::from(DecodedInstruction::RD_NULL));
-        InsnRecord([pc, opcode, rd, funct3, rs1, rs2, imm_or_funct7])
+        InsnRecord([pc, opcode, rd, funct3, rs1, rs2, imm_internal])
     }
 
     pub fn as_slice(&self) -> &[T] {
@@ -54,7 +54,7 @@ impl<T> InsnRecord<T> {
         &self.0[1]
     }
 
-    pub fn rd_or_null(&self) -> &T {
+    pub fn rd_internal(&self) -> &T {
         &self.0[2]
     }
 
@@ -75,9 +75,8 @@ impl<T> InsnRecord<T> {
         &self.0[0..6]
     }
 
-    /// The complete immediate value, for instruction types I/S/B/U/J.
-    /// Otherwise, the field funct7 of R-Type instructions.
-    pub fn imm_or_funct7(&self) -> &T {
+    /// The internal view of the immediate. See `DecodedInstruction::imm_internal`.
+    pub fn imm_internal(&self) -> &T {
         &self.0[6]
     }
 }
@@ -91,17 +90,17 @@ impl InsnRecord<u32> {
             insn.funct3_or_zero(),
             insn.rs1_or_zero(),
             insn.rs2_or_zero(),
-            insn.imm_or_funct7(),
+            insn.imm_internal(),
         ])
     }
 
     /// Interpret the immediate or funct7 as unsigned or signed depending on the instruction.
     /// Convert negative values from two's complement to field.
-    pub fn imm_or_funct7_field<F: SmallField>(insn: &DecodedInstruction) -> F {
+    pub fn imm_internal_field<F: SmallField>(insn: &DecodedInstruction) -> F {
         if insn.imm_field_is_negative() {
-            -F::from(-(insn.imm_or_funct7() as i32) as u64)
+            -F::from(-(insn.imm_internal() as i32) as u64)
         } else {
-            F::from(insn.imm_or_funct7() as u64)
+            F::from(insn.imm_internal() as u64)
         }
     }
 }
@@ -136,7 +135,7 @@ impl<E: ExtensionField, const PROGRAM_SIZE: usize> TableCircuit<E>
             cb.create_fixed(|| "funct3")?,
             cb.create_fixed(|| "rs1")?,
             cb.create_fixed(|| "rs2")?,
-            cb.create_fixed(|| "imm_or_funct7")?,
+            cb.create_fixed(|| "imm_internal")?,
         ]);
 
         let mlt = cb.create_witin(|| "mlt");
@@ -183,8 +182,8 @@ impl<E: ExtensionField, const PROGRAM_SIZE: usize> TableCircuit<E>
 
                 set_fixed_val!(
                     row,
-                    config.record.imm_or_funct7(),
-                    InsnRecord::imm_or_funct7_field(&insn)
+                    config.record.imm_internal(),
+                    InsnRecord::imm_internal_field(&insn)
                 );
             });
 
