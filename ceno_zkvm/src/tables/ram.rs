@@ -1,7 +1,10 @@
-use ceno_emul::{Addr, CENO_PLATFORM, VMState, WORD_SIZE};
+use ceno_emul::{Addr, VMState, WORD_SIZE};
 use ram_circuit::{DynVolatileRamCircuit, NonVolatileRamCircuit, PubIORamCircuit};
 
-use crate::{instructions::riscv::constants::UINT_LIMBS, structs::RAMType};
+use crate::{
+    instructions::riscv::constants::UINT_LIMBS,
+    structs::{ProgramParams, RAMType},
+};
 
 mod ram_circuit;
 mod ram_impl;
@@ -13,15 +16,22 @@ pub struct MemTable;
 impl DynVolatileRamTable for MemTable {
     const RAM_TYPE: RAMType = RAMType::Memory;
     const V_LIMBS: usize = 1; // See `MemoryExpr`.
-    const OFFSET_ADDR: Addr = CENO_PLATFORM.ram_start();
-    const END_ADDR: Addr = CENO_PLATFORM.ram_end() + 1;
+
+    fn offset_addr(params: &ProgramParams) -> Addr {
+        params.platform.ram_start()
+    }
+
+    fn end_addr(params: &ProgramParams) -> Addr {
+        params.platform.ram_end()
+    }
 
     fn name() -> &'static str {
         "MemTable"
     }
 
-    fn max_len() -> usize {
-        let max_size = (Self::END_ADDR - Self::OFFSET_ADDR) / WORD_SIZE as Addr;
+    fn max_len(params: &ProgramParams) -> usize {
+        let max_size =
+            (Self::end_addr(params) - Self::offset_addr(params)).div_ceil(WORD_SIZE as u32) as Addr;
         1 << (u32::BITS - 1 - max_size.leading_zeros()) // prev_power_of_2
     }
 }
@@ -41,7 +51,7 @@ impl NonVolatileTable for RegTable {
         "RegTable"
     }
 
-    fn len() -> usize {
+    fn len(_params: &ProgramParams) -> usize {
         VMState::REG_COUNT.next_power_of_two()
     }
 }
@@ -56,9 +66,8 @@ impl NonVolatileTable for StaticMemTable {
     const V_LIMBS: usize = 1; // See `MemoryExpr`.
     const WRITABLE: bool = true;
 
-    fn len() -> usize {
-        // TODO: take as program parameter.
-        1 << 16 // words - 256KiB
+    fn len(params: &ProgramParams) -> usize {
+        params.static_memory_len
     }
 
     fn name() -> &'static str {
@@ -76,9 +85,8 @@ impl NonVolatileTable for PubIOTable {
     const V_LIMBS: usize = 1; // See `MemoryExpr`.
     const WRITABLE: bool = false;
 
-    fn len() -> usize {
-        // TODO: take as program parameter.
-        1 << 2 // words
+    fn len(params: &ProgramParams) -> usize {
+        params.pub_io_len
     }
 
     fn name() -> &'static str {
