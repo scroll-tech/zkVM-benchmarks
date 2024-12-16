@@ -8,3 +8,9 @@ name = "ceno_rt"
 readme = "README.md"
 repository = "https://github.com/scroll-tech/ceno"
 version = "0.1.0"
+
+[dependencies]
+rkyv = { version = "0.8", default-features = false, features = [
+  "alloc",
+  "bytecheck",
+] }
