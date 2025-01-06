@@ -20,6 +20,7 @@ const EXAMPLES: &[&str] = &[
     "median",
     "bubble_sorting",
     "hashing",
+    "is_prime",
 ];
 const CARGO_MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
 
