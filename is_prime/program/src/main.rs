@@ -9,7 +9,7 @@
 sp1_zkvm::entrypoint!(main);
 
 use alloy_sol_types::SolType;
-use fibonacci_lib::{is_prime, PublicValuesStruct};
+use is_prime_lib::{is_prime, PublicValuesStruct};
 
 pub fn main() {
     // Read an input to the program.

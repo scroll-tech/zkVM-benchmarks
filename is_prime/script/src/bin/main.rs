@@ -12,11 +12,11 @@
 
 use alloy_sol_types::SolType;
 use clap::Parser;
-use fibonacci_lib::PublicValuesStruct;
+use is_prime_lib::PublicValuesStruct;
 use sp1_sdk::{include_elf, ProverClient, SP1Stdin};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const FIBONACCI_ELF: &[u8] = include_elf!("fibonacci-program");
+pub const is_prime_ELF: &[u8] = include_elf!("is_prime-program");
 
 /// The arguments for the command.
 #[derive(Parser, Debug)]
@@ -55,7 +55,7 @@ fn main() {
 
     if args.execute {
         // Execute the program
-        let (output, report) = client.execute(FIBONACCI_ELF, stdin).run().unwrap();
+        let (output, report) = client.execute(is_prime_ELF, stdin).run().unwrap();
         println!("Program executed successfully.");
 
         // Read the output.
@@ -72,7 +72,7 @@ fn main() {
         println!("Number of cycles: {}", report.total_instruction_count());
     } else {
         // Setup the program for proving.
-        let (pk, vk) = client.setup(FIBONACCI_ELF);
+        let (pk, vk) = client.setup(is_prime_ELF);
 
         // Generate the proof
         let proof = client
