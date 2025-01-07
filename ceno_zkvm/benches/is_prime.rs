@@ -14,7 +14,7 @@ use mpcs::BasefoldDefault;
 criterion_group! {
   name = is_prime;
   config = Criterion::default().warm_up_time(Duration::from_millis(5000));
-  targets = is_prime_small
+  targets = is_prime_1
 }
 
 criterion_main!(is_prime);
@@ -28,13 +28,12 @@ fn setup() -> (Program, Platform) {
     let stack_size = 32768;
     let heap_size = 2097152;
     let pub_io_size = 16;
-
     let program = Program::load_elf(ceno_examples::is_prime, u32::MAX).unwrap();
     let platform = setup_platform(Preset::Ceno, &program, stack_size, heap_size, pub_io_size);
     (program, platform)
 }
 
-fn is_prime_small(c: &mut Criterion) {
+fn is_prime_1(c: &mut Criterion) {
     let (program, platform) = setup();
 
     for n in [100u32, 10000u32, 50000u32] {
