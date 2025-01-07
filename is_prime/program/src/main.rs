@@ -1,4 +1,4 @@
-//! A simple program that takes a number `n` as input, and writes the `n-1`th and `n`th fibonacci
+//! A simple program that takes a number `n` and counts the number of primes up to n
 //! number as an output.
 
 // These two lines are necessary for the program to properly compile.
@@ -18,7 +18,7 @@ pub fn main() {
     // from the prover.
     let n = sp1_zkvm::io::read::<u32>();
 
-    // Compute the n'th fibonacci number using a function from the workspace lib crate.
+    // Count (naively) the number of primes up to n inclusively
     let mut cnt_primes = 0;
     for i in 0..=n.into() {
         cnt_primes += is_prime(i) as u32;
