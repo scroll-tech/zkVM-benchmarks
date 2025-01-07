@@ -18,7 +18,7 @@ const EXAMPLES: &[&str] = &[
     "hints",
     "sorting",
     "median",
-    "bubble_sorting",
+    "quadratic_sorting",
     "hashing",
     "is_prime",
 ];
