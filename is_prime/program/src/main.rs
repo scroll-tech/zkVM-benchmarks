@@ -8,8 +8,20 @@
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
-use alloy_sol_types::SolType;
-use is_prime_lib::{is_prime, PublicValuesStruct};
+pub fn is_prime(n: u32) -> bool {
+    if n < 2 {
+        return false;
+    }
+    let mut i = 2;
+    while i * i <= n {
+        if n % i == 0 {
+            return false;
+        }
+        i += 1;
+    }
+
+    return true;
+}
 
 pub fn main() {
     // Read an input to the program.
@@ -24,10 +36,7 @@ pub fn main() {
         cnt_primes += is_prime(i) as u32;
     }
 
-    // Encode the public values of the program.
-    let bytes = PublicValuesStruct::abi_encode(&PublicValuesStruct { n, cnt_primes });
-
-    // Commit to the public values of the program. The final proof will have a commitment to all the
-    // bytes that were committed to.
-    sp1_zkvm::io::commit_slice(&bytes);
+    if cnt_primes > 1000 * 1000 {
+        panic!();
+    }
 }
