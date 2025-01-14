@@ -1,8 +1,5 @@
 [workspace]
-members = [
-    "program",
-    "script",
-]
+members = ["program", "script"]
 resolver = "2"
 
 [profile.test]
@@ -14,3 +11,5 @@ lto = "thin"
 
 [profile.release]
 lto = "fat"
+panic = "abort"
+codegen-units = 1
