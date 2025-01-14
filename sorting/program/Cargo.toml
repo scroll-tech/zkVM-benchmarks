@@ -4,6 +4,5 @@ name = "sorting-program"
 edition = "2021"
 
 [dependencies]
-alloy-sol-types = { workspace = true }
+rand = "0.8.5"
 sp1-zkvm = "3.0.0-rc4"
-sorting-lib = { path = "../lib" }

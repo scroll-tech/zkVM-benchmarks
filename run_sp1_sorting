@@ -1,7 +1,14 @@
 #!/bin/bash
 set -euxo pipefail
-export N=$((1<<10))
-output="output_time"
+
+N="$1"
+
+# We assume that "${output_dir}" exists.
+export output_dir="$2"
+test -d "${output_dir}"
+
+output_time="$(realpath "${output_dir}/output_time")"
+output_log="$(realpath "${output_dir}/log")"
 
 (
   cd sorting/program
@@ -9,14 +16,13 @@ output="output_time"
 )
 (
   cd sorting/script
-
-  # export RUSTFLAGS="-C target-cpu=native -C target-feature=+avx512f"
-  # export RUSTFLAGS="-C target-cpu=native"
+  if grep --silent avx512 /proc/cpuinfo; then
+    export RUSTFLAGS="-C target-cpu=native -C target-feature=+avx512f"
+  else
+    export RUSTFLAGS="-C target-cpu=native"
+  fi
   export RUST_LOG=info
   # cargo clean
   cargo build --release --bin sorting
-  /usr/bin/time --verbose --output="${output}" -- cargo run --release -- --n=$N --prove
-  echo "RUSTFLAGS=\'${RUSTFLAGS:-}\'"
-  echo "N=\'${N}'"
-  cat "${output}"
+  /usr/bin/time --verbose --output="${output_time}" -- cargo run --release -- --n="${N}" --prove | tee "${output_log}"
 )

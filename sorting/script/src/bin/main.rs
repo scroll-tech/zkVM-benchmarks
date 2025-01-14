@@ -10,9 +10,7 @@
 //! RUST_LOG=info cargo run --release -- --prove
 //! ```
 
-use alloy_sol_types::SolType;
 use clap::Parser;
-use sorting_lib::PublicValuesStruct;
 use sp1_sdk::{include_elf, ProverClient, SP1Stdin};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
@@ -57,12 +55,6 @@ fn main() {
         // Execute the program
         let (output, report) = client.execute(sorting_ELF, stdin).run().unwrap();
         println!("Program executed successfully.");
-
-        // Read the output.
-        let decoded = PublicValuesStruct::abi_decode(output.as_slice(), true).unwrap();
-        let PublicValuesStruct { n, median } = decoded;
-        println!("n: {}", n);
-        println!("median: {}", median);
 
         // Record the number of cycles executed.
         println!("Number of cycles: {}", report.total_instruction_count());

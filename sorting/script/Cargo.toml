@@ -8,10 +8,6 @@ default-run = "sorting"
 name = "sorting"
 path = "src/bin/main.rs"
 
-[[bin]]
-name = "evm"
-path = "src/bin/evm.rs"
-
 [dependencies]
 sp1-sdk = "3.0.0"
 serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
@@ -19,8 +15,6 @@ serde = { version = "1.0.200", default-features = false, features = ["derive"] }
 clap = { version = "4.0", features = ["derive", "env"] }
 tracing = "0.1.40"
 hex = "0.4.3"
-alloy-sol-types = { workspace = true }
-sorting-lib = { path = "../lib" }
 
 [build-dependencies]
 sp1-helper = "3.0.0"
