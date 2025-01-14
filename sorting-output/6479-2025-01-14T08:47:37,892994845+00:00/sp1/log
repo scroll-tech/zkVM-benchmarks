@@ -1,0 +1,97 @@
+[2m2025-01-14T08:47:39.565614Z[0m [32m INFO[0m vk verification: true
+n: 6479
+[2m2025-01-14T08:47:40.778656Z[0m [32m INFO[0m [1mprove_core[0m:[1mclone[0m: close [3mtime.busy[0m[2m=[0m98.0µs [3mtime.idle[0m[2m=[0m2.33µs
+stdout: WARNING: Using insecure random number generator.
+[2m2025-01-14T08:47:40.928657Z[0m [32m INFO[0m [1mprove_core[0m:[1mexecute[0m: close [3mtime.busy[0m[2m=[0m150ms [3mtime.idle[0m[2m=[0m673ns
+[2m2025-01-14T08:47:40.930258Z[0m [32m INFO[0m [1mprove_core[0m:[1mcreate memory checkpoint[0m: close [3mtime.busy[0m[2m=[0m1.57ms [3mtime.idle[0m[2m=[0m948ns
+stdout: WARNING: Using insecure random number generator.
+[2m2025-01-14T08:47:41.751146Z[0m [32m INFO[0m [1mprove_core[0m: generated 1 records    
+[2m2025-01-14T08:47:41.751172Z[0m [32m INFO[0m [1mprove_core[0m: waiting for turn 0    
+[2m2025-01-14T08:47:41.751413Z[0m [32m INFO[0m [1mprove_core[0m: deferred 1 records    
+[2m2025-01-14T08:47:41.751423Z[0m [32m INFO[0m [1mprove_core[0m: collecting checkpoints    
+[2m2025-01-14T08:47:41.751428Z[0m [32m INFO[0m [1mprove_core[0m: fixing shape
+[2m2025-01-14T08:47:41.751497Z[0m [32m INFO[0m [1mprove_core[0m: fixing shape
+stdout: WARNING: Using insecure random number generator.
+[2m2025-01-14T08:47:42.918878Z[0m [32m INFO[0m [1mprove_core[0m: generated 1 records    
+[2m2025-01-14T08:47:42.919142Z[0m [32m INFO[0m [1mprove_core[0m: deferred 1 records    
+[2m2025-01-14T08:48:08.881006Z[0m [32m INFO[0m [1mprove_core[0m: execution report (totals): total_cycles=1978691, total_syscall_cycles=20, touched_memory_addresses=33661
+[2m2025-01-14T08:48:08.881033Z[0m [32m INFO[0m [1mprove_core[0m: execution report (opcode counts):
+[2m2025-01-14T08:48:08.881044Z[0m [32m INFO[0m [1mprove_core[0m:   602582 add
+[2m2025-01-14T08:48:08.881046Z[0m [32m INFO[0m [1mprove_core[0m:   346294 lw
+[2m2025-01-14T08:48:08.881048Z[0m [32m INFO[0m [1mprove_core[0m:   323201 sw
+[2m2025-01-14T08:48:08.881050Z[0m [32m INFO[0m [1mprove_core[0m:   167212 sll
+[2m2025-01-14T08:48:08.881052Z[0m [32m INFO[0m [1mprove_core[0m:    99660 bltu
+[2m2025-01-14T08:48:08.881054Z[0m [32m INFO[0m [1mprove_core[0m:    86206 xor
+[2m2025-01-14T08:48:08.881056Z[0m [32m INFO[0m [1mprove_core[0m:    82459 srl
+[2m2025-01-14T08:48:08.881057Z[0m [32m INFO[0m [1mprove_core[0m:    80676 or
+[2m2025-01-14T08:48:08.881059Z[0m [32m INFO[0m [1mprove_core[0m:    73617 sltu
+[2m2025-01-14T08:48:08.881061Z[0m [32m INFO[0m [1mprove_core[0m:    34472 bne
+[2m2025-01-14T08:48:08.881062Z[0m [32m INFO[0m [1mprove_core[0m:    25791 beq
+[2m2025-01-14T08:48:08.881064Z[0m [32m INFO[0m [1mprove_core[0m:    23723 bgeu
+[2m2025-01-14T08:48:08.881066Z[0m [32m INFO[0m [1mprove_core[0m:    13646 jal
+[2m2025-01-14T08:48:08.881068Z[0m [32m INFO[0m [1mprove_core[0m:     6957 sub
+[2m2025-01-14T08:48:08.881069Z[0m [32m INFO[0m [1mprove_core[0m:     4210 jalr
+[2m2025-01-14T08:48:08.881071Z[0m [32m INFO[0m [1mprove_core[0m:     3938 and
+[2m2025-01-14T08:48:08.881073Z[0m [32m INFO[0m [1mprove_core[0m:     2108 auipc
+[2m2025-01-14T08:48:08.881074Z[0m [32m INFO[0m [1mprove_core[0m:      978 mul
+[2m2025-01-14T08:48:08.881076Z[0m [32m INFO[0m [1mprove_core[0m:      429 sb
+[2m2025-01-14T08:48:08.881078Z[0m [32m INFO[0m [1mprove_core[0m:      240 lbu
+[2m2025-01-14T08:48:08.881080Z[0m [32m INFO[0m [1mprove_core[0m:      160 mulhu
+[2m2025-01-14T08:48:08.881081Z[0m [32m INFO[0m [1mprove_core[0m:      104 blt
+[2m2025-01-14T08:48:08.881083Z[0m [32m INFO[0m [1mprove_core[0m:       20 ecall
+[2m2025-01-14T08:48:08.881085Z[0m [32m INFO[0m [1mprove_core[0m:        4 lb
+[2m2025-01-14T08:48:08.881087Z[0m [32m INFO[0m [1mprove_core[0m:        3 divu
+[2m2025-01-14T08:48:08.881088Z[0m [32m INFO[0m [1mprove_core[0m:        1 bge
+[2m2025-01-14T08:48:08.881090Z[0m [32m INFO[0m [1mprove_core[0m:        0 sra
+[2m2025-01-14T08:48:08.881092Z[0m [32m INFO[0m [1mprove_core[0m:        0 slt
+[2m2025-01-14T08:48:08.881093Z[0m [32m INFO[0m [1mprove_core[0m:        0 lh
+[2m2025-01-14T08:48:08.881095Z[0m [32m INFO[0m [1mprove_core[0m:        0 lhu
+[2m2025-01-14T08:48:08.881097Z[0m [32m INFO[0m [1mprove_core[0m:        0 sh
+[2m2025-01-14T08:48:08.881099Z[0m [32m INFO[0m [1mprove_core[0m:        0 ebreak
+[2m2025-01-14T08:48:08.881101Z[0m [32m INFO[0m [1mprove_core[0m:        0 mulh
+[2m2025-01-14T08:48:08.881102Z[0m [32m INFO[0m [1mprove_core[0m:        0 mulhsu
+[2m2025-01-14T08:48:08.881104Z[0m [32m INFO[0m [1mprove_core[0m:        0 div
+[2m2025-01-14T08:48:08.881106Z[0m [32m INFO[0m [1mprove_core[0m:        0 rem
+[2m2025-01-14T08:48:08.881107Z[0m [32m INFO[0m [1mprove_core[0m:        0 remu
+[2m2025-01-14T08:48:08.881109Z[0m [32m INFO[0m [1mprove_core[0m:        0 unimp
+[2m2025-01-14T08:48:08.881111Z[0m [32m INFO[0m [1mprove_core[0m: execution report (syscall counts):
+[2m2025-01-14T08:48:08.881118Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit
+[2m2025-01-14T08:48:08.881121Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit_deferred_proofs
+[2m2025-01-14T08:48:08.881123Z[0m [32m INFO[0m [1mprove_core[0m:   1 halt
+[2m2025-01-14T08:48:08.881124Z[0m [32m INFO[0m [1mprove_core[0m:   1 write
+[2m2025-01-14T08:48:08.881126Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_len
+[2m2025-01-14T08:48:08.881128Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_read
+[2m2025-01-14T08:48:08.881130Z[0m [32m INFO[0m [1mprove_core[0m:   0 enter_unconstrained
+[2m2025-01-14T08:48:08.881132Z[0m [32m INFO[0m [1mprove_core[0m:   0 exit_unconstrained
+[2m2025-01-14T08:48:08.881134Z[0m [32m INFO[0m [1mprove_core[0m:   0 verify_sp1_proof
+[2m2025-01-14T08:48:08.881135Z[0m [32m INFO[0m [1mprove_core[0m:   0 ed_decompress
+[2m2025-01-14T08:48:08.881137Z[0m [32m INFO[0m [1mprove_core[0m:   0 secp256k1_double
+[2m2025-01-14T08:48:08.881139Z[0m [32m INFO[0m [1mprove_core[0m:   0 secp256k1_decompress
+[2m2025-01-14T08:48:08.881141Z[0m [32m INFO[0m [1mprove_core[0m:   0 bn254_double
+[2m2025-01-14T08:48:08.881143Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_decompress
+[2m2025-01-14T08:48:08.881145Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_double
+[2m2025-01-14T08:48:08.881146Z[0m [32m INFO[0m [1mprove_core[0m:   0 sha_compress
+[2m2025-01-14T08:48:08.881148Z[0m [32m INFO[0m [1mprove_core[0m:   0 ed_add
+[2m2025-01-14T08:48:08.881149Z[0m [32m INFO[0m [1mprove_core[0m:   0 keccak_permute
+[2m2025-01-14T08:48:08.881150Z[0m [32m INFO[0m [1mprove_core[0m:   0 secp256k1_add
+[2m2025-01-14T08:48:08.881152Z[0m [32m INFO[0m [1mprove_core[0m:   0 bn254_add
+[2m2025-01-14T08:48:08.881154Z[0m [32m INFO[0m [1mprove_core[0m:   0 uint256_mul
+[2m2025-01-14T08:48:08.881155Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_add
+[2m2025-01-14T08:48:08.881157Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_fp_add
+[2m2025-01-14T08:48:08.881159Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_fp_sub
+[2m2025-01-14T08:48:08.881160Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_fp_mul
+[2m2025-01-14T08:48:08.881161Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_fp2_add
+[2m2025-01-14T08:48:08.881163Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_fp2_sub
+[2m2025-01-14T08:48:08.881164Z[0m [32m INFO[0m [1mprove_core[0m:   0 bls12381_fp2_mul
+[2m2025-01-14T08:48:08.881165Z[0m [32m INFO[0m [1mprove_core[0m:   0 bn254_fp_add
+[2m2025-01-14T08:48:08.881167Z[0m [32m INFO[0m [1mprove_core[0m:   0 bn254_fp_sub
+[2m2025-01-14T08:48:08.881168Z[0m [32m INFO[0m [1mprove_core[0m:   0 bn254_fp_mul
+[2m2025-01-14T08:48:08.881170Z[0m [32m INFO[0m [1mprove_core[0m:   0 bn254_fp2_add
+[2m2025-01-14T08:48:08.881171Z[0m [32m INFO[0m [1mprove_core[0m:   0 bn254_fp2_sub
+[2m2025-01-14T08:48:08.881173Z[0m [32m INFO[0m [1mprove_core[0m:   0 bn254_fp2_mul
+[2m2025-01-14T08:48:08.881174Z[0m [32m INFO[0m [1mprove_core[0m:   0 sha_extend
+[2m2025-01-14T08:48:09.164460Z[0m [32m INFO[0m [1mprove_core[0m: summary: cycles=1978691, gas=2288753, e2e=28.10290597s, khz=70.41, proofSize=2812176
+[2m2025-01-14T08:48:09.185576Z[0m [32m INFO[0m [1mprove_core[0m: close [3mtime.busy[0m[2m=[0m26.1s [3mtime.idle[0m[2m=[0m2.52s
+Successfully generated proof!
+[2m2025-01-14T08:48:09.409110Z[0m [32m INFO[0m [1mverify[0m: close [3mtime.busy[0m[2m=[0m222ms [3mtime.idle[0m[2m=[0m1.76µs
+Successfully verified proof!
