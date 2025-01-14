@@ -82,3 +82,43 @@ stdout: WARNING: Using insecure random number generator.
 [2m2025-01-14T14:39:46.956023Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallCore: 5   -> 10 
 [2m2025-01-14T14:39:46.956025Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallInstrs: 5   -> 10 
 [2m2025-01-14T14:39:47.313409Z[0m [32m INFO[0m [1mprove_core[0m:[1mgenerate main traces[0m: close [3mtime.busy[0m[2m=[0m357ms [3mtime.idle[0m[2m=[0m1.61µs [2m[3mindex[0m[2m=[0m0[0m
+[2m2025-01-14T14:40:37.409915Z[0m [32m INFO[0m [1mprove_core[0m: execution report (totals): total_cycles=9920712, total_syscall_cycles=20, touched_memory_addresses=80229
+[2m2025-01-14T14:40:37.409940Z[0m [32m INFO[0m [1mprove_core[0m: execution report (opcode counts):
+[2m2025-01-14T14:40:37.409948Z[0m [32m INFO[0m [1mprove_core[0m:   3141951 add
+[2m2025-01-14T14:40:37.409951Z[0m [32m INFO[0m [1mprove_core[0m:   1709818 lw
+[2m2025-01-14T14:40:37.409952Z[0m [32m INFO[0m [1mprove_core[0m:   1606278 sw
+[2m2025-01-14T14:40:37.409955Z[0m [32m INFO[0m [1mprove_core[0m:    825650 sll
+[2m2025-01-14T14:40:37.409957Z[0m [32m INFO[0m [1mprove_core[0m:    532087 bltu
+[2m2025-01-14T14:40:37.409958Z[0m [32m INFO[0m [1mprove_core[0m:    404931 sltu
+[2m2025-01-14T14:40:37.409960Z[0m [32m INFO[0m [1mprove_core[0m:    387317 xor
+[2m2025-01-14T14:40:37.409962Z[0m [32m INFO[0m [1mprove_core[0m:    366946 srl
+[2m2025-01-14T14:40:37.409963Z[0m [32m INFO[0m [1mprove_core[0m:    361194 or
+[2m2025-01-14T14:40:37.409965Z[0m [32m INFO[0m [1mprove_core[0m:    190379 bne
+[2m2025-01-14T14:40:37.409967Z[0m [32m INFO[0m [1mprove_core[0m:    124500 bgeu
+[2m2025-01-14T14:40:37.409968Z[0m [32m INFO[0m [1mprove_core[0m:    118810 beq
+[2m2025-01-14T14:40:37.409970Z[0m [32m INFO[0m [1mprove_core[0m:     70289 jal
+[2m2025-01-14T14:40:37.409972Z[0m [32m INFO[0m [1mprove_core[0m:     30967 sub
+[2m2025-01-14T14:40:37.409973Z[0m [32m INFO[0m [1mprove_core[0m:     19227 jalr
+[2m2025-01-14T14:40:37.409975Z[0m [32m INFO[0m [1mprove_core[0m:     15490 and
+[2m2025-01-14T14:40:37.409977Z[0m [32m INFO[0m [1mprove_core[0m:      9617 auipc
+[2m2025-01-14T14:40:37.409979Z[0m [32m INFO[0m [1mprove_core[0m:      3471 mul
+[2m2025-01-14T14:40:37.409980Z[0m [32m INFO[0m [1mprove_core[0m:       550 sb
+[2m2025-01-14T14:40:37.409981Z[0m [32m INFO[0m [1mprove_core[0m:       466 blt
+[2m2025-01-14T14:40:37.409982Z[0m [32m INFO[0m [1mprove_core[0m:       414 lbu
+[2m2025-01-14T14:40:37.409984Z[0m [32m INFO[0m [1mprove_core[0m:       332 mulhu
+[2m2025-01-14T14:40:37.409985Z[0m [32m INFO[0m [1mprove_core[0m:        20 ecall
+[2m2025-01-14T14:40:37.409987Z[0m [32m INFO[0m [1mprove_core[0m:         4 lb
+[2m2025-01-14T14:40:37.409988Z[0m [32m INFO[0m [1mprove_core[0m:         3 divu
+[2m2025-01-14T14:40:37.409989Z[0m [32m INFO[0m [1mprove_core[0m:         1 bge
+[2m2025-01-14T14:40:37.409992Z[0m [32m INFO[0m [1mprove_core[0m: execution report (syscall counts):
+[2m2025-01-14T14:40:37.409996Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit
+[2m2025-01-14T14:40:37.409998Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit_deferred_proofs
+[2m2025-01-14T14:40:37.410000Z[0m [32m INFO[0m [1mprove_core[0m:   1 halt
+[2m2025-01-14T14:40:37.410001Z[0m [32m INFO[0m [1mprove_core[0m:   1 write
+[2m2025-01-14T14:40:37.410003Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_len
+[2m2025-01-14T14:40:37.410004Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_read
+[2m2025-01-14T14:40:37.410011Z[0m [32m INFO[0m [1mprove_core[0m: summary: cycles=9920712, e2e=52.752655459s, khz=188.06
+[2m2025-01-14T14:40:37.415590Z[0m [32m INFO[0m [1mprove_core[0m: close [3mtime.busy[0m[2m=[0m50.4s [3mtime.idle[0m[2m=[0m2.35s
+Successfully generated proof!
+[2m2025-01-14T14:40:38.502479Z[0m [32m INFO[0m [1mverify[0m: close [3mtime.busy[0m[2m=[0m1.07s [3mtime.idle[0m[2m=[0m2.33µs
+Successfully verified proof!
