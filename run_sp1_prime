@@ -1,7 +1,10 @@
 #!/bin/bash
 set -euxo pipefail
-export N=$((1<<10))
-output="output_time"
+# export N=$(((1<<10) - 1))
+# export N=1997
+export N=23
+output_time="output_time"
+log="sp1_log"
 
 what="is_prime"
 
@@ -17,8 +20,8 @@ what="is_prime"
   export RUST_LOG=info
   # cargo clean
   cargo build --release --bin "${what}"
-  /usr/bin/time --verbose --output="${output}" -- cargo run --release --bin "${what}" -- --n=$N --prove
+  /usr/bin/time --verbose --output="${output_time}" -- cargo run --release --bin "${what}" -- --n=$N --prove | tee "${log}"
   echo "RUSTFLAGS=\'${RUSTFLAGS:-}\'"
   echo "N=\'${N}'"
-  cat "${output}"
+  cat "${output_time}"
 )
