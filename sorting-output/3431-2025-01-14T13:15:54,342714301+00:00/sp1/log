@@ -1,0 +1,69 @@
+[2m2025-01-14T13:15:55.743452Z[0m [33m WARN[0m SP1_PROVER environment variable not set, defaulting to 'cpu'    
+[2m2025-01-14T13:15:56.203805Z[0m [32m INFO[0m vk verification: true
+n: 3431
+[2m2025-01-14T13:15:58.553139Z[0m [32m INFO[0m [1mprove_core[0m: clk = 0 pc = 0x200d04    
+stdout: WARNING: Using insecure random number generator.
+[2m2025-01-14T13:15:58.587686Z[0m [32m INFO[0m [1mprove_core[0m: clk = 0 pc = 0x200d04    
+stdout: WARNING: Using insecure random number generator.
+[2m2025-01-14T13:15:58.739916Z[0m [32m INFO[0m [1mprove_core[0m: deferred 0 records    
+[2m2025-01-14T13:15:58.813563Z[0m [32m INFO[0m [1mprove_core[0m: Shard Lifted: Index=1, Cluster=2602
+[2m2025-01-14T13:15:58.813586Z[0m [32m INFO[0m [1mprove_core[0m: Chip Cpu: 20  -> 20 
+[2m2025-01-14T13:15:58.813589Z[0m [32m INFO[0m [1mprove_core[0m: Chip DivRem: 2   -> 17 
+[2m2025-01-14T13:15:58.813590Z[0m [32m INFO[0m [1mprove_core[0m: Chip AddSub: 20  -> 20 
+[2m2025-01-14T13:15:58.813593Z[0m [32m INFO[0m [1mprove_core[0m: Chip Bitwise: 17  -> 17 
+[2m2025-01-14T13:15:58.813595Z[0m [32m INFO[0m [1mprove_core[0m: Chip Mul: 10  -> 17 
+[2m2025-01-14T13:15:58.813596Z[0m [32m INFO[0m [1mprove_core[0m: Chip ShiftRight: 16  -> 17 
+[2m2025-01-14T13:15:58.813598Z[0m [32m INFO[0m [1mprove_core[0m: Chip ShiftLeft: 17  -> 17 
+[2m2025-01-14T13:15:58.813599Z[0m [32m INFO[0m [1mprove_core[0m: Chip Lt: 18  -> 18 
+[2m2025-01-14T13:15:58.813600Z[0m [32m INFO[0m [1mprove_core[0m: Chip MemoryLocal: 11  -> 17 
+[2m2025-01-14T13:15:58.813602Z[0m [32m INFO[0m [1mprove_core[0m: Chip MemoryInstrs: 19  -> 19 
+[2m2025-01-14T13:15:58.813603Z[0m [32m INFO[0m [1mprove_core[0m: Chip Auipc: 11  -> 17 
+[2m2025-01-14T13:15:58.813604Z[0m [32m INFO[0m [1mprove_core[0m: Chip Branch: 17  -> 17 
+[2m2025-01-14T13:15:58.813605Z[0m [32m INFO[0m [1mprove_core[0m: Chip Jump: 14  -> 17 
+[2m2025-01-14T13:15:58.813606Z[0m [32m INFO[0m [1mprove_core[0m: Chip Global: 14  -> 18 
+[2m2025-01-14T13:15:58.813607Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallCore: 5   -> 17 
+[2m2025-01-14T13:15:58.813609Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallInstrs: 5   -> 17 
+[2m2025-01-14T13:15:58.813610Z[0m [32m INFO[0m [1mprove_core[0m: Chip MemoryGlobalInit: 13  -> 17 
+[2m2025-01-14T13:15:58.813611Z[0m [32m INFO[0m [1mprove_core[0m: Chip MemoryGlobalFinalize: 15  -> 17 
+[2m2025-01-14T13:15:58.813612Z[0m [32m INFO[0m [1mprove_core[0m: Chip Global: 16  -> 18 
+[2m2025-01-14T13:15:58.909001Z[0m [32m INFO[0m [1mprove_core[0m:[1mgenerate main traces[0m: close [3mtime.busy[0m[2m=[0m95.3ms [3mtime.idle[0m[2m=[0m1.90µs [2m[3mindex[0m[2m=[0m0[0m
+[2m2025-01-14T13:16:15.228794Z[0m [32m INFO[0m [1mprove_core[0m: execution report (totals): total_cycles=1009747, total_syscall_cycles=20, touched_memory_addresses=27525
+[2m2025-01-14T13:16:15.228826Z[0m [32m INFO[0m [1mprove_core[0m: execution report (opcode counts):
+[2m2025-01-14T13:16:15.228835Z[0m [32m INFO[0m [1mprove_core[0m:   301893 add
+[2m2025-01-14T13:16:15.228837Z[0m [32m INFO[0m [1mprove_core[0m:   177573 lw
+[2m2025-01-14T13:16:15.228839Z[0m [32m INFO[0m [1mprove_core[0m:   165519 sw
+[2m2025-01-14T13:16:15.228841Z[0m [32m INFO[0m [1mprove_core[0m:    85877 sll
+[2m2025-01-14T13:16:15.228843Z[0m [32m INFO[0m [1mprove_core[0m:    48958 bltu
+[2m2025-01-14T13:16:15.228845Z[0m [32m INFO[0m [1mprove_core[0m:    46266 xor
+[2m2025-01-14T13:16:15.228847Z[0m [32m INFO[0m [1mprove_core[0m:    44610 srl
+[2m2025-01-14T13:16:15.228848Z[0m [32m INFO[0m [1mprove_core[0m:    43485 or
+[2m2025-01-14T13:16:15.228850Z[0m [32m INFO[0m [1mprove_core[0m:    35554 sltu
+[2m2025-01-14T13:16:15.228851Z[0m [32m INFO[0m [1mprove_core[0m:    16876 bne
+[2m2025-01-14T13:16:15.228853Z[0m [32m INFO[0m [1mprove_core[0m:    13814 beq
+[2m2025-01-14T13:16:15.228854Z[0m [32m INFO[0m [1mprove_core[0m:    11858 bgeu
+[2m2025-01-14T13:16:15.228855Z[0m [32m INFO[0m [1mprove_core[0m:     6961 jal
+[2m2025-01-14T13:16:15.228857Z[0m [32m INFO[0m [1mprove_core[0m:     3659 sub
+[2m2025-01-14T13:16:15.228858Z[0m [32m INFO[0m [1mprove_core[0m:     2255 and
+[2m2025-01-14T13:16:15.228859Z[0m [32m INFO[0m [1mprove_core[0m:     2156 jalr
+[2m2025-01-14T13:16:15.228860Z[0m [32m INFO[0m [1mprove_core[0m:     1081 auipc
+[2m2025-01-14T13:16:15.228862Z[0m [32m INFO[0m [1mprove_core[0m:      569 mul
+[2m2025-01-14T13:16:15.228863Z[0m [32m INFO[0m [1mprove_core[0m:      403 sb
+[2m2025-01-14T13:16:15.228864Z[0m [32m INFO[0m [1mprove_core[0m:      188 lbu
+[2m2025-01-14T13:16:15.228866Z[0m [32m INFO[0m [1mprove_core[0m:      108 mulhu
+[2m2025-01-14T13:16:15.228867Z[0m [32m INFO[0m [1mprove_core[0m:       56 blt
+[2m2025-01-14T13:16:15.228868Z[0m [32m INFO[0m [1mprove_core[0m:       20 ecall
+[2m2025-01-14T13:16:15.228869Z[0m [32m INFO[0m [1mprove_core[0m:        4 lb
+[2m2025-01-14T13:16:15.228871Z[0m [32m INFO[0m [1mprove_core[0m:        3 divu
+[2m2025-01-14T13:16:15.228872Z[0m [32m INFO[0m [1mprove_core[0m:        1 bge
+[2m2025-01-14T13:16:15.228874Z[0m [32m INFO[0m [1mprove_core[0m: execution report (syscall counts):
+[2m2025-01-14T13:16:15.228880Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit
+[2m2025-01-14T13:16:15.228882Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit_deferred_proofs
+[2m2025-01-14T13:16:15.228884Z[0m [32m INFO[0m [1mprove_core[0m:   1 halt
+[2m2025-01-14T13:16:15.228885Z[0m [32m INFO[0m [1mprove_core[0m:   1 write
+[2m2025-01-14T13:16:15.228887Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_len
+[2m2025-01-14T13:16:15.228888Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_read
+[2m2025-01-14T13:16:15.228896Z[0m [32m INFO[0m [1mprove_core[0m: summary: cycles=1009747, e2e=16.67641629s, khz=60.55
+[2m2025-01-14T13:16:15.237558Z[0m [32m INFO[0m [1mprove_core[0m: close [3mtime.busy[0m[2m=[0m16.4s [3mtime.idle[0m[2m=[0m326ms
+Successfully generated proof!
+[2m2025-01-14T13:16:15.470658Z[0m [32m INFO[0m [1mverify[0m: close [3mtime.busy[0m[2m=[0m224ms [3mtime.idle[0m[2m=[0m1.78µs
+Successfully verified proof!

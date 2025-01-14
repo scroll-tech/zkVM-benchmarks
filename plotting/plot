@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euxo pipefail
+
+plotting/get_data | grep sp1 > plotting/sp1.data
+plotting/get_data | grep ceno > plotting/ceno.data
+
+(
+  cd plotting
+  gnuplot plot.gnuplot
+)

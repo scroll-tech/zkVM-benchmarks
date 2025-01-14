@@ -7,7 +7,7 @@ for file in $(find sorting-output -iname output_time); do
     n="$(echo ${file} | sed -n 's|sorting-output/\([0-9]*\)-.*|\1|p')"
     system="$(echo ${file} | grep --only-matching --extended-regexp "ceno|sp1")"
     echo -ne "${n}\t${system}\t"
-    grep --only-matching --perl-regexp 'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): \K[0-9:]+\.[0-9]+$' "$file" | awk --field-separator=":" '
+    (grep --only-matching --perl-regexp 'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): \K[0-9:]+\.[0-9]+$' "$file" || true) | awk --field-separator=":" '
         {
             if (NF == 3) {
                 print ($1 * 3600) + ($2 * 60) + $3
