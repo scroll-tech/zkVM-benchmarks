@@ -1,0 +1,24 @@
+#!/bin/bash
+set -euxo pipefail
+export N=$((1<<10))
+output="output_time"
+
+what="is_prime"
+
+(
+  cd "${what}"/program
+  cargo prove build
+)
+(
+  cd "${what}"/script
+
+  # export RUSTFLAGS="-C target-cpu=native -C target-feature=+avx512f"
+  # export RUSTFLAGS="-C target-cpu=native"
+  export RUST_LOG=info
+  # cargo clean
+  cargo build --release --bin "${what}"
+  /usr/bin/time --verbose --output="${output}" -- cargo run --release --bin "${what}" -- --n=$N --prove
+  echo "RUSTFLAGS=\'${RUSTFLAGS:-}\'"
+  echo "N=\'${N}'"
+  cat "${output}"
+)
