@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+
+nice ./plotting/plot 2>/dev/null
+nice git add sorting-output/ plotting/
+nice git commit -m "More data"
+nice git push origin
