@@ -126,3 +126,43 @@ stdout: WARNING: Using insecure random number generator.
 [2m2025-01-14T15:30:32.888012Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallCore: 5   -> 10 
 [2m2025-01-14T15:30:32.888013Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallInstrs: 5   -> 10 
 [2m2025-01-14T15:30:33.414443Z[0m [32m INFO[0m [1mprove_core[0m:[1mgenerate main traces[0m: close [3mtime.busy[0m[2m=[0m526ms [3mtime.idle[0m[2m=[0m3.03µs [2m[3mindex[0m[2m=[0m0[0m
+[2m2025-01-14T15:31:46.102851Z[0m [32m INFO[0m [1mprove_core[0m: execution report (totals): total_cycles=15705064, total_syscall_cycles=20, touched_memory_addresses=112560
+[2m2025-01-14T15:31:46.102876Z[0m [32m INFO[0m [1mprove_core[0m: execution report (opcode counts):
+[2m2025-01-14T15:31:46.102884Z[0m [32m INFO[0m [1mprove_core[0m:   5021473 add
+[2m2025-01-14T15:31:46.102888Z[0m [32m INFO[0m [1mprove_core[0m:   2694663 lw
+[2m2025-01-14T15:31:46.102889Z[0m [32m INFO[0m [1mprove_core[0m:   2534228 sw
+[2m2025-01-14T15:31:46.102891Z[0m [32m INFO[0m [1mprove_core[0m:   1301253 sll
+[2m2025-01-14T15:31:46.102893Z[0m [32m INFO[0m [1mprove_core[0m:    850262 bltu
+[2m2025-01-14T15:31:46.102895Z[0m [32m INFO[0m [1mprove_core[0m:    652161 sltu
+[2m2025-01-14T15:31:46.102897Z[0m [32m INFO[0m [1mprove_core[0m:    598163 xor
+[2m2025-01-14T15:31:46.102898Z[0m [32m INFO[0m [1mprove_core[0m:    565902 srl
+[2m2025-01-14T15:31:46.102900Z[0m [32m INFO[0m [1mprove_core[0m:    557348 or
+[2m2025-01-14T15:31:46.102902Z[0m [32m INFO[0m [1mprove_core[0m:    311903 bne
+[2m2025-01-14T15:31:46.102903Z[0m [32m INFO[0m [1mprove_core[0m:    198483 bgeu
+[2m2025-01-14T15:31:46.102905Z[0m [32m INFO[0m [1mprove_core[0m:    183199 beq
+[2m2025-01-14T15:31:46.102907Z[0m [32m INFO[0m [1mprove_core[0m:    112647 jal
+[2m2025-01-14T15:31:46.102908Z[0m [32m INFO[0m [1mprove_core[0m:     47688 sub
+[2m2025-01-14T15:31:46.102910Z[0m [32m INFO[0m [1mprove_core[0m:     29944 jalr
+[2m2025-01-14T15:31:46.102912Z[0m [32m INFO[0m [1mprove_core[0m:     23069 and
+[2m2025-01-14T15:31:46.102913Z[0m [32m INFO[0m [1mprove_core[0m:     14976 auipc
+[2m2025-01-14T15:31:46.102915Z[0m [32m INFO[0m [1mprove_core[0m:      5137 mul
+[2m2025-01-14T15:31:46.102917Z[0m [32m INFO[0m [1mprove_core[0m:       887 sb
+[2m2025-01-14T15:31:46.102918Z[0m [32m INFO[0m [1mprove_core[0m:       718 blt
+[2m2025-01-14T15:31:46.102920Z[0m [32m INFO[0m [1mprove_core[0m:       508 lbu
+[2m2025-01-14T15:31:46.102922Z[0m [32m INFO[0m [1mprove_core[0m:       424 mulhu
+[2m2025-01-14T15:31:46.102923Z[0m [32m INFO[0m [1mprove_core[0m:        20 ecall
+[2m2025-01-14T15:31:46.102925Z[0m [32m INFO[0m [1mprove_core[0m:         4 lb
+[2m2025-01-14T15:31:46.102927Z[0m [32m INFO[0m [1mprove_core[0m:         3 divu
+[2m2025-01-14T15:31:46.102928Z[0m [32m INFO[0m [1mprove_core[0m:         1 bge
+[2m2025-01-14T15:31:46.102931Z[0m [32m INFO[0m [1mprove_core[0m: execution report (syscall counts):
+[2m2025-01-14T15:31:46.102936Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit
+[2m2025-01-14T15:31:46.102939Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit_deferred_proofs
+[2m2025-01-14T15:31:46.102940Z[0m [32m INFO[0m [1mprove_core[0m:   1 halt
+[2m2025-01-14T15:31:46.102942Z[0m [32m INFO[0m [1mprove_core[0m:   1 write
+[2m2025-01-14T15:31:46.102944Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_len
+[2m2025-01-14T15:31:46.102946Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_read
+[2m2025-01-14T15:31:46.102953Z[0m [32m INFO[0m [1mprove_core[0m: summary: cycles=15705064, e2e=76.849742908s, khz=204.36
+[2m2025-01-14T15:31:46.119372Z[0m [32m INFO[0m [1mprove_core[0m: close [3mtime.busy[0m[2m=[0m73.2s [3mtime.idle[0m[2m=[0m3.67s
+Successfully generated proof!
+[2m2025-01-14T15:31:47.704844Z[0m [32m INFO[0m [1mverify[0m: close [3mtime.busy[0m[2m=[0m1.57s [3mtime.idle[0m[2m=[0m2.22µs
+Successfully verified proof!
