@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euxo pipefail
+
+(
+  cd sorting/program
+  cargo prove build
+)
+(
+  cd sorting/script
+
+  time (
+    # export RUSTFLAGS="-C target-cpu=native -C target-feature=+avx512f"
+    export RUSTFLAGS="-C target-cpu=native"
+    export RUST_LOG=info
+    # cargo clean
+    cargo build --release --bin sorting
+    cargo run --release -- --n=5000 --prove
+  )
+)
