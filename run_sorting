@@ -9,6 +9,5 @@ for N in $(shuf --input-range=1-${MAX}); do
     output="$(realpath --canonicalize-missing "sorting-output/${N}-$(date --iso-8601=ns --utc)/${system}")"
     mkdir --parents "${output}"
     ./run_${system}_sorting "${N}" "${output}"
-
   done
 done
