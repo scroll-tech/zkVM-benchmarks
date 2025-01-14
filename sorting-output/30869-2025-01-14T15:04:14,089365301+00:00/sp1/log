@@ -84,3 +84,43 @@ stdout: WARNING: Using insecure random number generator.
 [2m2025-01-14T15:04:20.703379Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallCore: 5   -> 10 
 [2m2025-01-14T15:04:20.703380Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallInstrs: 5   -> 10 
 [2m2025-01-14T15:04:21.086998Z[0m [32m INFO[0m [1mprove_core[0m:[1mgenerate main traces[0m: close [3mtime.busy[0m[2m=[0m383ms [3mtime.idle[0m[2m=[0m2.24µs [2m[3mindex[0m[2m=[0m0[0m
+[2m2025-01-14T15:05:13.430852Z[0m [32m INFO[0m [1mprove_core[0m: execution report (totals): total_cycles=10370685, total_syscall_cycles=20, touched_memory_addresses=82465
+[2m2025-01-14T15:05:13.430879Z[0m [32m INFO[0m [1mprove_core[0m: execution report (opcode counts):
+[2m2025-01-14T15:05:13.430887Z[0m [32m INFO[0m [1mprove_core[0m:   3300092 add
+[2m2025-01-14T15:05:13.430891Z[0m [32m INFO[0m [1mprove_core[0m:   1782153 lw
+[2m2025-01-14T15:05:13.430893Z[0m [32m INFO[0m [1mprove_core[0m:   1675130 sw
+[2m2025-01-14T15:05:13.430895Z[0m [32m INFO[0m [1mprove_core[0m:    859820 sll
+[2m2025-01-14T15:05:13.430897Z[0m [32m INFO[0m [1mprove_core[0m:    554422 bltu
+[2m2025-01-14T15:05:13.430898Z[0m [32m INFO[0m [1mprove_core[0m:    423238 sltu
+[2m2025-01-14T15:05:13.430900Z[0m [32m INFO[0m [1mprove_core[0m:    402020 xor
+[2m2025-01-14T15:05:13.430903Z[0m [32m INFO[0m [1mprove_core[0m:    381028 srl
+[2m2025-01-14T15:05:13.430904Z[0m [32m INFO[0m [1mprove_core[0m:    375081 or
+[2m2025-01-14T15:05:13.430905Z[0m [32m INFO[0m [1mprove_core[0m:    204987 bne
+[2m2025-01-14T15:05:13.430907Z[0m [32m INFO[0m [1mprove_core[0m:    130007 bgeu
+[2m2025-01-14T15:05:13.430908Z[0m [32m INFO[0m [1mprove_core[0m:    124194 beq
+[2m2025-01-14T15:05:13.430909Z[0m [32m INFO[0m [1mprove_core[0m:     74998 jal
+[2m2025-01-14T15:05:13.430911Z[0m [32m INFO[0m [1mprove_core[0m:     31960 sub
+[2m2025-01-14T15:05:13.430912Z[0m [32m INFO[0m [1mprove_core[0m:     20103 jalr
+[2m2025-01-14T15:05:13.430913Z[0m [32m INFO[0m [1mprove_core[0m:     15970 and
+[2m2025-01-14T15:05:13.430914Z[0m [32m INFO[0m [1mprove_core[0m:     10055 auipc
+[2m2025-01-14T15:05:13.430916Z[0m [32m INFO[0m [1mprove_core[0m:      3609 mul
+[2m2025-01-14T15:05:13.430917Z[0m [32m INFO[0m [1mprove_core[0m:       552 sb
+[2m2025-01-14T15:05:13.430918Z[0m [32m INFO[0m [1mprove_core[0m:       484 blt
+[2m2025-01-14T15:05:13.430920Z[0m [32m INFO[0m [1mprove_core[0m:       418 lbu
+[2m2025-01-14T15:05:13.430921Z[0m [32m INFO[0m [1mprove_core[0m:       336 mulhu
+[2m2025-01-14T15:05:13.430922Z[0m [32m INFO[0m [1mprove_core[0m:        20 ecall
+[2m2025-01-14T15:05:13.430924Z[0m [32m INFO[0m [1mprove_core[0m:         4 lb
+[2m2025-01-14T15:05:13.430925Z[0m [32m INFO[0m [1mprove_core[0m:         3 divu
+[2m2025-01-14T15:05:13.430926Z[0m [32m INFO[0m [1mprove_core[0m:         1 bge
+[2m2025-01-14T15:05:13.430929Z[0m [32m INFO[0m [1mprove_core[0m: execution report (syscall counts):
+[2m2025-01-14T15:05:13.430935Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit
+[2m2025-01-14T15:05:13.430937Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit_deferred_proofs
+[2m2025-01-14T15:05:13.430938Z[0m [32m INFO[0m [1mprove_core[0m:   1 halt
+[2m2025-01-14T15:05:13.430939Z[0m [32m INFO[0m [1mprove_core[0m:   1 write
+[2m2025-01-14T15:05:13.430941Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_len
+[2m2025-01-14T15:05:13.430942Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_read
+[2m2025-01-14T15:05:13.430949Z[0m [32m INFO[0m [1mprove_core[0m: summary: cycles=10370685, e2e=55.181661174s, khz=187.94
+[2m2025-01-14T15:05:13.434952Z[0m [32m INFO[0m [1mprove_core[0m: close [3mtime.busy[0m[2m=[0m52.7s [3mtime.idle[0m[2m=[0m2.51s
+Successfully generated proof!
+[2m2025-01-14T15:05:14.501883Z[0m [32m INFO[0m [1mverify[0m: close [3mtime.busy[0m[2m=[0m1.05s [3mtime.idle[0m[2m=[0m2.94µs
+Successfully verified proof!
