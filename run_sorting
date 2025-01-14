@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euxo pipefail
 
-export MAX=12000
-# export MAX="$((1 << 14))"
+# export MAX=12000
+export MAX="$((1 << 15))"
 
 for N in $(shuf --input-range=1-${MAX}); do
   for system in $(shuf --echo ceno sp1); do

@@ -1,7 +1,7 @@
 # plot_sp1_ceno.gnu
 
 # 1) Choose SVG output
-set terminal svg size 800,600 font "Helvetica,10"
+set terminal svg size 1600,1200 font "Helvetica,10"
 set output 'sp1_ceno_scatter.svg'
 
 # 2) Basic plot settings
