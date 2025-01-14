@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euxo pipefail
+
+N="$1"
+
+# We assume that "${output_dir}" exists.
+output_dir="$(realpath "$2")"
+test -d "${output_dir}"
+
+output_time="${output_dir}/output_time"
+output_log="${output_dir}/log"
+hints="${output_dir}/hints"
+elf="$(realpath ceno/examples/target/riscv32im-ceno-zkvm-elf/release/examples/sorting)"
+
+(
+  cd ceno/examples
+  cargo build --release --example=sorting
+  test -f "${elf}"
+)
+
+(
+  cd ceno
+  cargo build --release --bin e2e
+  cargo run --example=sorting_prepare_witness -- --size="${N}" > "${hints}"
+)
+(
+  cd ceno
+  /usr/bin/time --verbose --output="${output_time}" -- \
+    cargo run --package=ceno_zkvm --bin=e2e --profile=release -- --hints="${hints}" "${elf}"
+)
