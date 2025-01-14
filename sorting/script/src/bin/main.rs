@@ -14,7 +14,7 @@ use clap::Parser;
 use sp1_sdk::{include_elf, ProverClient, SP1Stdin};
 
 /// The ELF (executable and linkable format) file for the Succinct RISC-V zkVM.
-pub const sorting_ELF: &[u8] = include_elf!("sorting-program");
+pub const SORTING_ELF: &[u8] = include_elf!("sorting-program");
 
 /// The arguments for the command.
 #[derive(Parser, Debug)]
@@ -53,14 +53,14 @@ fn main() {
 
     if args.execute {
         // Execute the program
-        let (output, report) = client.execute(sorting_ELF, stdin).run().unwrap();
+        let (_output, report) = client.execute(SORTING_ELF, stdin).run().unwrap();
         println!("Program executed successfully.");
 
         // Record the number of cycles executed.
         println!("Number of cycles: {}", report.total_instruction_count());
     } else {
         // Setup the program for proving.
-        let (pk, vk) = client.setup(sorting_ELF);
+        let (pk, vk) = client.setup(SORTING_ELF);
 
         // Generate the proof
         let proof = client
