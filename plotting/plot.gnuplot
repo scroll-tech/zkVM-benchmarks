@@ -1,5 +1,8 @@
 # plot_sp1_ceno.gnu
 
+# TODO: plot both column 5 (wall clock time) and 3+4 (user + system time)
+# in the same run of gnuplot, but to two different files.
+
 # 1) Choose SVG output
 set terminal png size 1600,1200 font "Helvetica,10"
 set output 'sp1_ceno_cpu_time.png'

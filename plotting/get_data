@@ -42,7 +42,12 @@ echo -e "#\tsize\tsystem\tuser time\tsystem time\twall clock time"
             }' <<< "${wall_clock_raw}")"
         fi
 
+        # Grab system time, or NaN if not found
+        mem="$(grep --only-matching \
+            --perl-regexp 'Maximum resident set size \(kbytes\): \K[0-9]+' \
+            "${file}" || echo NaN)"
+
         # Print in columns: n, system, user_time, system_time, wall_clock_seconds
-        echo -e "${n}\t${system}\t${user_time}\t${system_time}\t${wall_clock_seconds}"
+        echo -e "${n}\t${system}\t${user_time}\t${system_time}\t${wall_clock_seconds}\t${mem}"
     done
 ) | sort --human-numeric-sort
