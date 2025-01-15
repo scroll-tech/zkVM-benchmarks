@@ -1,19 +1,48 @@
 #!/bin/bash
 set -euxo pipefail
 
-# find sorting-output -iname output_time -print0 | xargs -0 grep --only-matching --perl-regexp 'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): \K[0-9:]+\.[0-9]+$' | awk --field-separator=":" '
+echo -e "#\tsize\tsystem\tuser time\tsystem time\twall clock time"
+
 (
     for file in $(find sorting-output -iname output_time); do
-        n="$(echo ${file} | sed -n 's|sorting-output/\([0-9]*\)-.*|\1|p')"
-        system="$(echo ${file} | grep --only-matching --extended-regexp "ceno|sp1")"
-        echo -ne "${n}\t${system}\t"
-        grep --only-matching --perl-regexp 'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): \K[0-9:]+\.[0-9]+$' "$file" | awk --field-separator=":" '
-        {
-            if (NF == 3) {
-                print ($1 * 3600) + ($2 * 60) + $3
-            } else if (NF == 2) {
-                print ($1 * 60) + $2
-            }
-        }' || echo
+        # Extract the "n" from the path
+        n="$(echo "${file}" | sed -n 's|sorting-output/\([0-9]*\)-.*|\1|p')"
+
+        # Identify whether it's "ceno" or "sp1" from the path
+        system="$(echo "${file}" | grep --only-matching --extended-regexp "ceno|sp1")"
+
+        # Grab user time, or NaN if not found
+        user_time="$(grep --only-matching \
+            --perl-regexp 'User time \(seconds\): \K[0-9]+\.[0-9]+' \
+            "${file}" || echo NaN)"
+
+        # Grab system time, or NaN if not found
+        system_time="$(grep --only-matching \
+            --perl-regexp 'System time \(seconds\): \K[0-9]+\.[0-9]+' \
+            "${file}" || echo NaN)"
+
+        # Grab elapsed wall clock time as a string like 0:31.96 or 1:02:14.25
+        # Then convert it to total seconds via awk (or NaN if not found)
+        wall_clock_raw="$(grep --only-matching \
+            --perl-regexp 'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): \K[0-9:]+\.[0-9]+' \
+            "${file}" || echo NaN)"
+
+        # If we got NaN, keep it. Otherwise, convert wall_clock_raw to seconds.
+        if [[ "${wall_clock_raw}" == "NaN" ]]; then
+            wall_clock_seconds="NaN"
+        else
+            wall_clock_seconds="$(awk -F ':' '{
+                if (NF == 3) {
+                    # h:mm:ss
+                    print ($1 * 3600) + ($2 * 60) + $3
+                } else if (NF == 2) {
+                    # m:ss
+                    print ($1 * 60) + $2
+                }
+            }' <<< "${wall_clock_raw}")"
+        fi
+
+        # Print in columns: n, system, user_time, system_time, wall_clock_seconds
+        echo -e "${n}\t${system}\t${user_time}\t${system_time}\t${wall_clock_seconds}"
     done
 ) | sort --human-numeric-sort
