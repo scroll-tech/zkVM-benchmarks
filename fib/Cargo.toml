@@ -1,0 +1,15 @@
+[workspace]
+members = ["program", "script"]
+resolver = "2"
+
+[profile.test]
+opt-level = 3
+debug = true
+debug-assertions = true
+incremental = false
+lto = "thin"
+
+[profile.release]
+lto = "fat"
+panic = "abort"
+codegen-units = 1

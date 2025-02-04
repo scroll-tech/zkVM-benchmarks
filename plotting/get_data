@@ -1,12 +1,15 @@
 #!/bin/bash
 set -euxo pipefail
 
+guest="sorting"
+guest="fib"
+
 echo -e "#\tsize\tsystem\tuser time\tsystem time\twall clock time"
 
 (
-    for file in $(find sorting-output -iname output_time); do
+    for file in $(find ${guest}-output -iname output_time); do
         # Extract the "n" from the path
-        n="$(echo "${file}" | sed -n 's|sorting-output/\([0-9]*\)-.*|\1|p')"
+        n="$(echo "${file}" | sed -n 's|'"${guest}"'-output/\([0-9]*\)-.*|\1|p')"
 
         # Identify whether it's "ceno" or "sp1" from the path
         system="$(echo "${file}" | grep --only-matching --extended-regexp "ceno|sp1")"

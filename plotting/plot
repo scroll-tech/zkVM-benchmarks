@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euxo pipefail
 
-nice plotting/get_data >plotting/all.data 2>/dev/null
+nice plotting/get_data >plotting/all-fib.data 2>/dev/null
 
 cd plotting
-nice grep sp1 all.data >sp1.data
-nice grep ceno all.data >ceno.data
+nice grep sp1 all-fib.data >sp1-fib.data
+nice grep ceno all-fib.data >ceno-fib.data
 nice gnuplot plot.gnuplot

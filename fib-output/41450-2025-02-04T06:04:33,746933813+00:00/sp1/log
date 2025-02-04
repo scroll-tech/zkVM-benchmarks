@@ -1,0 +1,62 @@
+[2m2025-02-04T06:04:35.153901Z[0m [33m WARN[0m SP1_PROVER environment variable not set, defaulting to 'cpu'    
+[2m2025-02-04T06:04:35.621303Z[0m [32m INFO[0m vk verification: true
+n: 41450
+[2m2025-02-04T06:04:37.875605Z[0m [32m INFO[0m [1mprove_core[0m: clk = 0 pc = 0x200d04    
+[2m2025-02-04T06:04:37.883272Z[0m [32m INFO[0m [1mprove_core[0m: clk = 0 pc = 0x200d04    
+[2m2025-02-04T06:04:37.915175Z[0m [32m INFO[0m [1mprove_core[0m: deferred 0 records    
+[2m2025-02-04T06:04:37.944681Z[0m [32m INFO[0m [1mprove_core[0m: Shard Lifted: Index=1, Cluster=1864
+[2m2025-02-04T06:04:37.944702Z[0m [32m INFO[0m [1mprove_core[0m: Chip Cpu: 18  -> 18 
+[2m2025-02-04T06:04:37.944706Z[0m [32m INFO[0m [1mprove_core[0m: Chip DivRem: 0   -> 15 
+[2m2025-02-04T06:04:37.944708Z[0m [32m INFO[0m [1mprove_core[0m: Chip AddSub: 18  -> 18 
+[2m2025-02-04T06:04:37.944710Z[0m [32m INFO[0m [1mprove_core[0m: Chip Bitwise: 11  -> 15 
+[2m2025-02-04T06:04:37.944712Z[0m [32m INFO[0m [1mprove_core[0m: Chip Mul: 1   -> 15 
+[2m2025-02-04T06:04:37.944729Z[0m [32m INFO[0m [1mprove_core[0m: Chip ShiftRight: 10  -> 15 
+[2m2025-02-04T06:04:37.944730Z[0m [32m INFO[0m [1mprove_core[0m: Chip ShiftLeft: 10  -> 15 
+[2m2025-02-04T06:04:37.944733Z[0m [32m INFO[0m [1mprove_core[0m: Chip Lt: 17  -> 17 
+[2m2025-02-04T06:04:37.944735Z[0m [32m INFO[0m [1mprove_core[0m: Chip MemoryLocal: 6   -> 15 
+[2m2025-02-04T06:04:37.944736Z[0m [32m INFO[0m [1mprove_core[0m: Chip MemoryInstrs: 10  -> 16 
+[2m2025-02-04T06:04:37.944737Z[0m [32m INFO[0m [1mprove_core[0m: Chip Auipc: 4   -> 15 
+[2m2025-02-04T06:04:37.944738Z[0m [32m INFO[0m [1mprove_core[0m: Chip Branch: 16  -> 16 
+[2m2025-02-04T06:04:37.944739Z[0m [32m INFO[0m [1mprove_core[0m: Chip Jump: 5   -> 15 
+[2m2025-02-04T06:04:37.944741Z[0m [32m INFO[0m [1mprove_core[0m: Chip Global: 9   -> 18 
+[2m2025-02-04T06:04:37.944742Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallCore: 5   -> 15 
+[2m2025-02-04T06:04:37.944743Z[0m [32m INFO[0m [1mprove_core[0m: Chip SyscallInstrs: 5   -> 15 
+[2m2025-02-04T06:04:37.944744Z[0m [32m INFO[0m [1mprove_core[0m: Chip MemoryGlobalInit: 8   -> 17 
+[2m2025-02-04T06:04:37.944746Z[0m [32m INFO[0m [1mprove_core[0m: Chip MemoryGlobalFinalize: 14  -> 17 
+[2m2025-02-04T06:04:37.944747Z[0m [32m INFO[0m [1mprove_core[0m: Chip Global: 14  -> 18 
+[2m2025-02-04T06:04:37.990976Z[0m [32m INFO[0m [1mprove_core[0m:[1mgenerate main traces[0m: close [3mtime.busy[0m[2m=[0m46.2ms [3mtime.idle[0m[2m=[0m1.42µs [2m[3mindex[0m[2m=[0m0[0m
+[2m2025-02-04T06:04:45.753861Z[0m [32m INFO[0m [1mprove_core[0m: execution report (totals): total_cycles=211930, total_syscall_cycles=20, touched_memory_addresses=13173
+[2m2025-02-04T06:04:45.753886Z[0m [32m INFO[0m [1mprove_core[0m: execution report (opcode counts):
+[2m2025-02-04T06:04:45.753893Z[0m [32m INFO[0m [1mprove_core[0m:   166750 add
+[2m2025-02-04T06:04:45.753896Z[0m [32m INFO[0m [1mprove_core[0m:    41461 bne
+[2m2025-02-04T06:04:45.753899Z[0m [32m INFO[0m [1mprove_core[0m:      706 xor
+[2m2025-02-04T06:04:45.753901Z[0m [32m INFO[0m [1mprove_core[0m:      691 srl
+[2m2025-02-04T06:04:45.753902Z[0m [32m INFO[0m [1mprove_core[0m:      663 or
+[2m2025-02-04T06:04:45.753904Z[0m [32m INFO[0m [1mprove_core[0m:      653 sll
+[2m2025-02-04T06:04:45.753906Z[0m [32m INFO[0m [1mprove_core[0m:      304 lw
+[2m2025-02-04T06:04:45.753907Z[0m [32m INFO[0m [1mprove_core[0m:      271 sw
+[2m2025-02-04T06:04:45.753909Z[0m [32m INFO[0m [1mprove_core[0m:      236 and
+[2m2025-02-04T06:04:45.753911Z[0m [32m INFO[0m [1mprove_core[0m:       71 lbu
+[2m2025-02-04T06:04:45.753912Z[0m [32m INFO[0m [1mprove_core[0m:       26 bltu
+[2m2025-02-04T06:04:45.753914Z[0m [32m INFO[0m [1mprove_core[0m:       20 ecall
+[2m2025-02-04T06:04:45.753916Z[0m [32m INFO[0m [1mprove_core[0m:       18 sb
+[2m2025-02-04T06:04:45.753917Z[0m [32m INFO[0m [1mprove_core[0m:       16 jalr
+[2m2025-02-04T06:04:45.753919Z[0m [32m INFO[0m [1mprove_core[0m:       12 beq
+[2m2025-02-04T06:04:45.753921Z[0m [32m INFO[0m [1mprove_core[0m:       11 auipc
+[2m2025-02-04T06:04:45.753922Z[0m [32m INFO[0m [1mprove_core[0m:        8 sub
+[2m2025-02-04T06:04:45.753924Z[0m [32m INFO[0m [1mprove_core[0m:        5 sltu
+[2m2025-02-04T06:04:45.753926Z[0m [32m INFO[0m [1mprove_core[0m:        3 bgeu
+[2m2025-02-04T06:04:45.753927Z[0m [32m INFO[0m [1mprove_core[0m:        3 jal
+[2m2025-02-04T06:04:45.753929Z[0m [32m INFO[0m [1mprove_core[0m:        2 mul
+[2m2025-02-04T06:04:45.753932Z[0m [32m INFO[0m [1mprove_core[0m: execution report (syscall counts):
+[2m2025-02-04T06:04:45.753937Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit
+[2m2025-02-04T06:04:45.753939Z[0m [32m INFO[0m [1mprove_core[0m:   8 commit_deferred_proofs
+[2m2025-02-04T06:04:45.753940Z[0m [32m INFO[0m [1mprove_core[0m:   1 halt
+[2m2025-02-04T06:04:45.753942Z[0m [32m INFO[0m [1mprove_core[0m:   1 write
+[2m2025-02-04T06:04:45.753943Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_len
+[2m2025-02-04T06:04:45.753945Z[0m [32m INFO[0m [1mprove_core[0m:   1 hint_read
+[2m2025-02-04T06:04:45.753953Z[0m [32m INFO[0m [1mprove_core[0m: summary: cycles=211930, e2e=7.878821634s, khz=26.90
+[2m2025-02-04T06:04:45.763309Z[0m [32m INFO[0m [1mprove_core[0m: close [3mtime.busy[0m[2m=[0m7.78s [3mtime.idle[0m[2m=[0m112ms
+Successfully generated proof!
+[2m2025-02-04T06:04:45.988803Z[0m [32m INFO[0m [1mverify[0m: close [3mtime.busy[0m[2m=[0m221ms [3mtime.idle[0m[2m=[0m1.02µs
+Successfully verified proof!

@@ -1,5 +1,4 @@
-//! A simple program that takes a number `n` and counts the number of primes up to n
-//! number as an output.
+//! A simple program that takes a number `n`, generates n number numbers, and sorts them.
 
 // These two lines are necessary for the program to properly compile.
 //
